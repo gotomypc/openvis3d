@@ -157,6 +157,7 @@ OvImageT<T>& OvImageT<T>::operator = (const OvImageT<T> & rhsImage)
 	{
 		if(mSize != rhsImage.mSize) //reallocate memory only if size is different, else just use what is already there
 		{
+			if(mData!=0) {delete [] mData; mData = 0;}
 			mSize = rhsImage.mSize;
 			mData = new T[mSize];
 		}
@@ -591,14 +592,16 @@ const OvImageT<T> sinh (const OvImageT<T> & i1)
 }
 
 
-template<class T> const OvImageT<T> tanh (const OvImageT<T> & i1)
+template<class T> 
+const OvImageT<T> tanh (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
 	for(int i=0; i<result.mSize; i++) result.mData[i] = (T) tanh(i1.mData[i]);
 	return result;
 }
 
-template<class T> 
+
+template<class T> 
 const OvImageT<T> exp (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -841,7 +844,7 @@ const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, i
 			}
 
 	
-	if(listOfElements==0) delete [] listOfElements;
+	if(listOfElements!=0) delete [] listOfElements;
 	return result;
 }
 

@@ -78,7 +78,8 @@ public:
 	template<class T> friend const OvImageT<T> atan2 (const OvImageT<T> & iy, const OvImageT<T> & ix);
 	template<class T> friend const OvImageT<T> cosh (const OvImageT<T> & i1);
 	template<class T> friend const OvImageT<T> sinh (const OvImageT<T> & i1);
-	template<class T> friend const OvImageT<T> tanh (const OvImageT<T> & i1);	template<class T> friend const OvImageT<T> exp (const OvImageT<T> & i1);
+	template<class T> friend const OvImageT<T> tanh (const OvImageT<T> & i1);
+	template<class T> friend const OvImageT<T> exp (const OvImageT<T> & i1);
 	template<class T> friend const OvImageT<T> log (const OvImageT<T> & i1);
 	template<class T> friend const OvImageT<T> log10 (const OvImageT<T> & i1);
 	template<class T> friend const OvImageT<T> abs (const OvImageT<T> & i1);
