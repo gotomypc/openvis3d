@@ -1,13 +1,15 @@
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <iostream>
 
-template<class T>
+template<typename T>
 OvImageT<T>::OvImageT()
 : mHeight(0), mWidth(0), mChannels(0), mSize(0), mHeightTimesWidth(0), mData(0)
 {
 }
 
-template<class T>
+template<typename T>
 OvImageT<T>::OvImageT(int height, int width, int nColorChannels)
 : mHeight(0), mWidth(0), mChannels(0), mSize(0), mHeightTimesWidth(0), mData(0)
 {
@@ -35,8 +37,8 @@ OvImageT<T>::OvImageT(int height, int width, int nColorChannels)
 	mHeightTimesWidth = mWidth*mHeight;
 }
 
-template<class T>
-OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData=true)
+template<typename T>
+OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData)
 : mHeight(srcImage.mHeight), mWidth(srcImage.mWidth), mChannels(srcImage.mChannels), mSize(srcImage.mSize), mHeightTimesWidth(srcImage.mHeightTimesWidth)
 {
 	if((srcImage.mSize>0) && (srcImage.mData != 0))
@@ -73,21 +75,74 @@ OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData=true)
 	}
 }
 
-template<class T>
+template<typename T>
+template<typename C>
+OvImageT<T>::OvImageT(const OvImageT<C>& srcImage, bool copyData)
+{
+	int height,width,ncolors,srcSize;
+
+	srcImage.getDimensions(height,width,ncolors);
+	srcSize = height*width*ncolors;
+	
+	mHeight = height;
+	mWidth = width;
+	mChannels= ncolors;
+	mSize = srcSize;
+	mHeightTimesWidth = mHeight*mWidth;
+	
+	if(srcSize!=0)
+	{
+		mData = new T[mSize];
+		if(mData == 0)
+		{
+			mHeight = 0;
+			mWidth = 0;
+			mChannels = 0;
+			mSize = 0;
+			mHeightTimesWidth = 0;
+		}
+		else
+		{
+			if(copyData)
+			{
+				for(int k=0;k<mChannels;k++)
+					for(int j=0;j<mWidth;j++)
+						for(int i=0;i<mHeight;i++)
+							(*this)(i,j,k) = (T) srcImage(i,j,k); 
+			}
+			else
+			{
+				for(int i=0;i<mSize; i++) mData[i] = 0;
+			}
+		}
+	}
+	else
+	{
+		mHeight = 0;
+		mWidth = 0;
+		mChannels = 0;
+		mSize = 0;
+		mHeightTimesWidth = 0;
+		mData = 0;
+	}
+}
+
+
+template<typename T>
 OvImageT<T>::~OvImageT()
 {
 	if(mData!=0) delete [] mData;
 }
 
-template<class T>
-void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels)
+template<typename T>
+void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels) const
 {
 	height = mHeight;
 	width = mWidth;
 	nColorChannels = mChannels;
 }
 
-template<class T>
+template<typename T>
 void OvImageT<T>::resetDimensions(int height, int width, int nColorChannels)
 {
 	if(mData!=0) {delete [] mData; mData = 0;}
@@ -116,7 +171,7 @@ void OvImageT<T>::resetDimensions(int height, int width, int nColorChannels)
 	mHeightTimesWidth = mWidth*mHeight;
 }
 
-template<class T>
+template<typename T>
 void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 {
 	if((height*width*nColorChannels)==mSize)
@@ -129,26 +184,26 @@ void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 }
 
 
-template<class T>
+template<typename T>
 void OvImageT<T>::fillWithRandomNumbers(double multiplier)
 {
 	multiplier = multiplier/RAND_MAX;
 	for(int i=0; i<mSize; i++) mData[i] = (T) multiplier*rand();
 }
 
-template<class T>
+template<typename T>
 inline T& OvImageT<T>::operator() (int row, int column, int channel)
 {
 	return *(mData + channel*mHeightTimesWidth + column*mHeight + row); 
 }
 
-template<class T>
+template<typename T>
 inline T& OvImageT<T>::operator() (int row, int column, int channel) const
 {
 	return *(mData + channel*mHeightTimesWidth + column*mHeight + row); 
 }
 
-template<class T>
+template<typename T>
 OvImageT<T>& OvImageT<T>::operator = (const OvImageT<T> & rhsImage)
 {
 	if(this == &rhsImage) return (*this); // for a case where lhsimage == rhsimage
@@ -183,7 +238,52 @@ OvImageT<T>& OvImageT<T>::operator = (const OvImageT<T> & rhsImage)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
+template<typename C>
+OvImageT<T>& OvImageT<T>::operator = (const OvImageT<C> & rhsImage)
+{
+	//self-assignment check not necessary since T and C are different, hence not used below
+
+	int height,width,ncolors,rhssize;
+
+	rhsImage.getDimensions(height,width,ncolors);
+	rhssize = height*width*ncolors;
+
+	if(rhssize!=0)
+	{
+		if(mSize != rhssize) //reallocate memory only if size is different, else just use what is already there
+		{
+			if(mData!=0) {delete [] mData; mData = 0;}
+			mSize = rhssize;
+			mData = new T[mSize];
+		}
+		
+		if(mData == 0)
+		{
+			mHeight = 0;
+			mWidth = 0;
+			mChannels = 0;
+			mSize = 0;
+			mHeightTimesWidth = 0;
+		}
+		else
+		{
+			mHeight = height;
+			mWidth = width;
+			mChannels = ncolors; 
+			mHeightTimesWidth = mHeight*mWidth;
+
+			for(int k=0;k<mChannels;k++)
+				for(int j=0;j<mWidth;j++)
+					for(int i=0;i<mHeight;i++)
+						(*this)(i,j,k) = (T) rhsImage(i,j,k); 
+		}
+	}
+	return (*this);
+}
+
+
+template<typename T>
 OvImageT<T>& OvImageT<T>::operator = (const T & rhs)
 {
 	for(int i=0;i<mSize; i++) mData[i] = rhs;
@@ -191,28 +291,29 @@ OvImageT<T>& OvImageT<T>::operator = (const T & rhs)
 }
 
 
-template<class T>
+template<typename T>
 void OvImageT<T>::print(void)
 {
+	using namespace std;
 	int i,j,k;
 
-	printf("\nHeight:%d,Width:%d,Ncolors:%d\n",mHeight,mWidth,mChannels);
+	cout << "Height: " << mHeight << ",Width:" << mWidth << ",Channels:" << mChannels << endl;
 
 	for(k=0;k<mChannels;k++)
 	{
-		printf("Channel %d\n", k);
+		cout << "Channel " << k << endl;
 		for(i=0;i<mHeight;i++)
 		{
 			for(j=0;j<mWidth;j++)
 			{
-				printf("%f\t", (*this)(i,j,k));
+				cout << (*this)(i,j,k) << "\t";
 			}
-			printf("\n");
+			cout << endl;
 		}
 	}
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator += (const OvImageT<T> & rhs)
 {
 	if((mHeight==rhs.mHeight)&&(mWidth==rhs.mWidth)&&(mChannels==rhs.mChannels))
@@ -223,7 +324,7 @@ OvImageT<T> & OvImageT<T>::operator += (const OvImageT<T> & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator += (const T & rhs)
 {
 	for(int i=0; i<mSize; i++)
@@ -232,7 +333,7 @@ OvImageT<T> & OvImageT<T>::operator += (const T & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator -= (const OvImageT<T> & rhs)
 {
 	if((mHeight==rhs.mHeight)&&(mWidth==rhs.mWidth)&&(mChannels==rhs.mChannels))
@@ -243,7 +344,7 @@ OvImageT<T> & OvImageT<T>::operator -= (const OvImageT<T> & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator -= (const T & rhs)
 {
 	for(int i=0; i<mSize; i++)
@@ -252,7 +353,7 @@ OvImageT<T> & OvImageT<T>::operator -= (const T & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator *= (const OvImageT<T> & rhs)
 {
 	if((mHeight==rhs.mHeight)&&(mWidth==rhs.mWidth)&&(mChannels==rhs.mChannels))
@@ -263,7 +364,7 @@ OvImageT<T> & OvImageT<T>::operator *= (const OvImageT<T> & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator *= (const T & rhs)
 {
 	for(int i=0; i<mSize; i++)
@@ -272,7 +373,7 @@ OvImageT<T> & OvImageT<T>::operator *= (const T & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator /= (const OvImageT<T> & rhs)
 {
 	if((mHeight==rhs.mHeight)&&(mWidth==rhs.mWidth)&&(mChannels==rhs.mChannels))
@@ -283,7 +384,7 @@ OvImageT<T> & OvImageT<T>::operator /= (const OvImageT<T> & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator /= (const T & rhs)
 {
 	for(int i=0; i<mSize; i++)
@@ -292,7 +393,7 @@ OvImageT<T> & OvImageT<T>::operator /= (const T & rhs)
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator ++ ()
 {
 	for(int i=0; i<mSize; i++)
@@ -301,7 +402,7 @@ OvImageT<T> & OvImageT<T>::operator ++ ()
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 OvImageT<T> & OvImageT<T>::operator -- ()
 {
 	for(int i=0; i<mSize; i++)
@@ -310,7 +411,7 @@ OvImageT<T> & OvImageT<T>::operator -- ()
 	return (*this);
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> OvImageT<T>::operator ++ (int)
 {
 	OvImageT<T> oldImage(*this); //make a copy
@@ -320,7 +421,7 @@ const OvImageT<T> OvImageT<T>::operator ++ (int)
 	return (oldImage); //return the copy
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> OvImageT<T>::operator -- (int)
 {
 	OvImageT<T> oldImage(*this); //make a copy
@@ -330,7 +431,7 @@ const OvImageT<T> OvImageT<T>::operator -- (int)
 	return (oldImage); //return the copy
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> OvImageT<T>::operator - ()
 {
 	OvImageT<T> result(*this); 
@@ -341,7 +442,7 @@ const OvImageT<T> OvImageT<T>::operator - ()
 	return (result); 
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> OvImageT<T>::operator + ()
 {
 	OvImageT<T> result(*this); 
@@ -349,7 +450,7 @@ const OvImageT<T> OvImageT<T>::operator + ()
 }
 
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator + (const OvImageT<T> & i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -358,7 +459,7 @@ const OvImageT<T> operator + (const OvImageT<T> & i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator + (const double i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -367,7 +468,7 @@ const OvImageT<T> operator + (const double i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator + (const OvImageT<T> & i1, const double i2)
 {
 	OvImageT<T> result;
@@ -376,7 +477,7 @@ const OvImageT<T> operator + (const OvImageT<T> & i1, const double i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator - (const OvImageT<T> & i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -385,7 +486,7 @@ const OvImageT<T> operator - (const OvImageT<T> & i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator - (const double i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -394,7 +495,7 @@ const OvImageT<T> operator - (const double i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator - (const OvImageT<T> & i1, const double i2)
 {
 	OvImageT<T> result;
@@ -403,7 +504,7 @@ const OvImageT<T> operator - (const OvImageT<T> & i1, const double i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator * (const OvImageT<T> & i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -412,7 +513,7 @@ const OvImageT<T> operator * (const OvImageT<T> & i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator * (const double i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -421,7 +522,7 @@ const OvImageT<T> operator * (const double i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator * (const OvImageT<T> & i1, const double i2)
 {
 	OvImageT<T> result;
@@ -430,7 +531,7 @@ const OvImageT<T> operator * (const OvImageT<T> & i1, const double i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator / (const OvImageT<T> & i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -439,7 +540,7 @@ const OvImageT<T> operator / (const OvImageT<T> & i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator / (const double i1, const OvImageT<T> & i2)
 {
 	OvImageT<T> result;
@@ -448,7 +549,7 @@ const OvImageT<T> operator / (const double i1, const OvImageT<T> & i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 const OvImageT<T> operator / (const OvImageT<T> & i1, const double i2)
 {
 	OvImageT<T> result;
@@ -457,7 +558,7 @@ const OvImageT<T> operator / (const OvImageT<T> & i1, const double i2)
 	return result;
 }
 
-template<class T>
+template<typename T>
 T OvImageT<T>::sumRegion(int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi)
 {
 	int i,j,k;
@@ -480,21 +581,21 @@ T OvImageT<T>::sumRegion(int rowLo, int rowHi, int columnLo, int columnHi, int c
 	return result;
 }
 
-template<class T>
+template<typename T>
 T OvImageT<T>::sumSingleChannel(int channel)
 {
 	if((channel<0)||(channel>=mChannels)) return 0;
 	return sumRegion(-1,-1,-1,-1,channel,channel);
 }
 
-template<class T>
+template<typename T>
 T OvImageT<T>::sumAll(void)
 {
 	return sumRegion(-1,-1,-1,-1,-1,-1);
 }
 
 
-template<class T>
+template<typename T>
 T OvImageT<T>::L1Norm(void)
 {
 	T result = 0;
@@ -502,7 +603,7 @@ T OvImageT<T>::L1Norm(void)
 	return result;
 }
 
-template<class T>
+template<typename T>
 T OvImageT<T>::L2Norm(void)
 {
 	T result = 0;
@@ -511,7 +612,7 @@ T OvImageT<T>::L2Norm(void)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> cos (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -519,7 +620,7 @@ const OvImageT<T> cos (const OvImageT<T> & i1)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> sin (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -528,7 +629,7 @@ const OvImageT<T> sin (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> tan (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -537,7 +638,7 @@ const OvImageT<T> tan (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> acos (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -546,7 +647,7 @@ const OvImageT<T> acos (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> asin (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -555,7 +656,7 @@ const OvImageT<T> asin (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> atan (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -564,7 +665,7 @@ const OvImageT<T> atan (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> atan2 (const OvImageT<T> & iy, const OvImageT<T> & ix)
 {
 	OvImageT<T> result(iy,false); //create same-sized copy without copying contents
@@ -574,7 +675,7 @@ const OvImageT<T> atan2 (const OvImageT<T> & iy, const OvImageT<T> & ix)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> cosh (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -583,7 +684,7 @@ const OvImageT<T> cosh (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> sinh (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -592,7 +693,7 @@ const OvImageT<T> sinh (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> tanh (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -601,7 +702,7 @@ const OvImageT<T> tanh (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> exp (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -610,7 +711,7 @@ const OvImageT<T> exp (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> log (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -619,7 +720,7 @@ const OvImageT<T> log (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> log10 (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -628,7 +729,7 @@ const OvImageT<T> log10 (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> abs (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -637,7 +738,7 @@ const OvImageT<T> abs (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> ceil (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -646,7 +747,7 @@ const OvImageT<T> ceil (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> floor (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -654,7 +755,7 @@ const OvImageT<T> floor (const OvImageT<T> & i1)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> round (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -667,7 +768,7 @@ const OvImageT<T> round (const OvImageT<T> & i1)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> mod (const OvImageT<T> & i1, double d)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -676,7 +777,7 @@ const OvImageT<T> mod (const OvImageT<T> & i1, double d)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> pow (const OvImageT<T> & i1, double p)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -684,7 +785,7 @@ const OvImageT<T> pow (const OvImageT<T> & i1, double p)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> pow (double p, const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -692,7 +793,7 @@ const OvImageT<T> pow (double p, const OvImageT<T> & i1)
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> sqrt (const OvImageT<T> & i1)
 {
 	OvImageT<T> result(i1,false); //create same-sized copy without copying contents
@@ -701,7 +802,7 @@ const OvImageT<T> sqrt (const OvImageT<T> & i1)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> convolve2D (const OvImageT<T> & kernel, const OvImageT<T> & input)
 {
 	int iResult,jResult,k,iKernel,jKernel,iInput,jInput,iKernelMidpoint,jKernelMidpoint;
@@ -740,7 +841,7 @@ const OvImageT<T> convolve2D (const OvImageT<T> & kernel, const OvImageT<T> & in
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> filter2D (const OvImageT<T> & kernel, const OvImageT<T> & input)
 {
 	int iResult,jResult,k,iKernel,jKernel,iInput,jInput,iKernelMidpoint,jKernelMidpoint;
@@ -778,7 +879,7 @@ const OvImageT<T> filter2D (const OvImageT<T> & kernel, const OvImageT<T> & inpu
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 int medianFilter2DHelperFunc_Compare( const void *arg1, const void *arg2 )
 {
 	if((*(T*)arg1)<(*(T*)arg2)) return -1;
@@ -786,7 +887,7 @@ int medianFilter2DHelperFunc_Compare( const void *arg1, const void *arg2 )
 	else return 1;
 }
 
-template<class T> 
+template<typename T> 
 T medianFilter2DHelperFunc_FindMedian(int n, T*elements)
 {
 	qsort( (void *) elements, (size_t)n, sizeof(T), medianFilter2DHelperFunc_Compare<T>);
@@ -800,7 +901,7 @@ T medianFilter2DHelperFunc_FindMedian(int n, T*elements)
 }
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
 {
 	int iResult,jResult,k,iKernel,jKernel,iInput,jInput,iKernelMidpoint,jKernelMidpoint;
@@ -848,8 +949,8 @@ const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, i
 	return result;
 }
 
-template<class T> 
-const OvImageT<T> sum(const OvImageT<T> & input, int dimension)
+template<typename T> 
+const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
 {
 	OvImageT<T> result;
 	int i,j,k;
@@ -892,8 +993,8 @@ const OvImageT<T> sum(const OvImageT<T> & input, int dimension)
 	return result;
 }
 
-template<class T> 
-const OvImageT<T> mean(const OvImageT<T> & input, int dimension)
+template<typename T> 
+const OvImageT<T> mean(const OvImageT<T> & input, int dimension = 3)
 {
 	OvImageT<T> result;
 	int i,j,k;
@@ -936,8 +1037,8 @@ const OvImageT<T> mean(const OvImageT<T> & input, int dimension)
 	return result;
 }
 
-template<class T> 
-const OvImageT<T> min(const OvImageT<T> & input, int dimension)
+template<typename T> 
+const OvImageT<T> min(const OvImageT<T> & input, int dimension = 3)
 {
 	OvImageT<T> result;
 	int i,j,k;
@@ -980,8 +1081,8 @@ const OvImageT<T> min(const OvImageT<T> & input, int dimension)
 	return result;
 }
 
-template<class T> 
-const OvImageT<T> max(const OvImageT<T> & input, int dimension)
+template<typename T> 
+const OvImageT<T> max(const OvImageT<T> & input, int dimension = 3)
 {
 	OvImageT<T> result;
 	int i,j,k;
@@ -1026,7 +1127,7 @@ const OvImageT<T> max(const OvImageT<T> & input, int dimension)
 
 
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> transpose(const OvImageT<T> & input)
 {
 	OvImageT<T> result;
@@ -1046,7 +1147,7 @@ const OvImageT<T> transpose(const OvImageT<T> & input)
 	
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> flipLR(const OvImageT<T> & input)
 {
 	OvImageT<T> result(input,false);
@@ -1063,7 +1164,7 @@ const OvImageT<T> flipLR(const OvImageT<T> & input)
 	return result;	
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> flipUD(const OvImageT<T> & input)
 {
 	OvImageT<T> result(input,false);
@@ -1080,7 +1181,7 @@ const OvImageT<T> flipUD(const OvImageT<T> & input)
 	return result;	
 }
 
-template<class T> 
+template<typename T> 
 const OvImageT<T> rgb2gray(const OvImageT<T> & input)
 {
 	OvImageT<T> result(input,false);
@@ -1090,8 +1191,8 @@ const OvImageT<T> rgb2gray(const OvImageT<T> & input)
 	return result;	
 }
 
-template<class T> 
-const OvImageT<T> repmat (const OvImageT<T> & input, int height, int width, int channels)
+template<typename T> 
+const OvImageT<T> repmat (const OvImageT<T> & input, int height=1, int width=1, int channels=1)
 {
 	OvImageT<T> result;
 	int i,j,k;
@@ -1108,7 +1209,7 @@ const OvImageT<T> repmat (const OvImageT<T> & input, int height, int width, int 
 	return result;
 }
 
-template<class T> 
+template<typename T> 
 void OvImageT<T> ::setToMeshgridX (T x1, T x2, T y1, T y2, T dx, T dy)
 {
 	int i,j,height,width;
@@ -1127,7 +1228,7 @@ void OvImageT<T> ::setToMeshgridX (T x1, T x2, T y1, T y2, T dx, T dy)
 		}
 }
 
-template<class T> 
+template<typename T> 
 void OvImageT<T> ::setToMeshgridY (T x1, T x2, T y1, T y2, T dx, T dy)
 {
 	int i,j,height,width;
@@ -1146,11 +1247,11 @@ void OvImageT<T> ::setToMeshgridY (T x1, T x2, T y1, T y2, T dx, T dy)
 		}
 }
 
-template<class T> 
+template<typename T> 
 void OvImageT<T> ::setToGaussian(int size, float sigma)
 {
-	float x,y;
-	float halfsize;
+	double x,y;
+	double halfsize;
 
 	this->resetDimensions(size, size, 1); 
 	halfsize = (size-1)/2.0;	
