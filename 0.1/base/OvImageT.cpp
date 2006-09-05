@@ -1,19 +1,44 @@
+#ifndef __OVIMAGET_CPP
+#define __OVIMAGET_CPP
+
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
 
+/**  Rounds to nearest integer
+* 
+* 
+* @param value	input value
+* @return the rounded value
+*/
 inline int round(double value)
 {
 	return int(value + 0.5);
 }
 
+/** 
+* Constructor with no parameters to create empty image.
+* @see OvImageT(int height, int width, int nColorChannels)
+* @see OvImageT(const OvImageT<T>& srcImage, bool copyData)
+* @see OvImageT(const OvImageT<C>& srcImage, bool copyData)
+*/
 template<typename T>
 OvImageT<T>::OvImageT()
 : mHeight(0), mWidth(0), mChannels(0), mSize(0), mHeightTimesWidth(0), mData(0)
 {
 }
 
+/** 
+* Constructor specifying height, width and number of color channels.
+* 
+* @param height	desired height of the image
+* @param width desired width of image
+* @param nColorChannels desired number of color channels
+* @see OvImageT()
+* @see OvImageT(const OvImageT<T>& srcImage, bool copyData)
+* @see OvImageT(const OvImageT<C>& srcImage, bool copyData)
+*/
 template<typename T>
 OvImageT<T>::OvImageT(int height, int width, int nColorChannels)
 : mHeight(0), mWidth(0), mChannels(0), mSize(0), mHeightTimesWidth(0), mData(0)
@@ -42,6 +67,15 @@ OvImageT<T>::OvImageT(int height, int width, int nColorChannels)
 	mHeightTimesWidth = mWidth*mHeight;
 }
 
+/** 
+* Copy constructor creates image with same size as the input image, with the option of copying data.
+* 
+* @param srcImage source image whose dimensions are to be copied
+* @param copyData copies source data if set to true (default), otherwise returns zeroed image.
+* @see OvImageT()
+* @see OvImageT(int height, int width, int nColorChannels)
+* @see OvImageT(const OvImageT<C>& srcImage, bool copyData)
+*/
 template<typename T>
 OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData)
 : mHeight(srcImage.mHeight), mWidth(srcImage.mWidth), mChannels(srcImage.mChannels), mSize(srcImage.mSize), mHeightTimesWidth(srcImage.mHeightTimesWidth)
@@ -80,6 +114,19 @@ OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData)
 	}
 }
 
+/** 
+* Copy constructor to copy between two different image template types T and C.
+* <p>e.g., 
+* <br>OvImageT<int> i1(2,3,1);
+* <br>OvImageT<float> i2(i1);
+* </p>
+*
+* @param srcImage source image whose dimensions are to be copied (of a different template type)
+* @param copyData copies source data if set to true (default), otherwise returns zeroed image.
+* @see OvImageT()
+* @see OvImageT(int height, int width, int nColorChannels)
+* @see OvImageT(const OvImageT<T>& srcImage, bool copyData)
+*/
 template<typename T>
 template<typename C>
 OvImageT<T>::OvImageT(const OvImageT<C>& srcImage, bool copyData)
@@ -132,13 +179,15 @@ OvImageT<T>::OvImageT(const OvImageT<C>& srcImage, bool copyData)
 	}
 }
 
+/** 
+* Destructor of OvImageT.
+*/
 
 template<typename T>
 OvImageT<T>::~OvImageT()
 {
 	if(mData!=0) delete [] mData;
 }
-
 
 
 template<typename T>
@@ -1122,6 +1171,15 @@ const OvImageT<T> sqrt (const OvImageT<T> & i1)
 }
 
 
+/** 
+* @relates OvImageT
+* Performs 2D convolution on the input image with a given kernel.
+* 
+* @param kernel a 2D image used as a kernel for convolution
+* @param input the input image
+* @return convolved image
+* @see filter2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> convolve2D (const OvImageT<T> & kernel, const OvImageT<T> & input)
 {
@@ -1161,6 +1219,15 @@ const OvImageT<T> convolve2D (const OvImageT<T> & kernel, const OvImageT<T> & in
 }
 
 
+/** 
+* @relates OvImageT
+* Performs 2D filtering on the input image with a given kernel.
+* 
+* @param kernel a 2D image used as a kernel for filtering
+* @param input the input image
+* @return filtered image
+* @see convolve2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> filter2D (const OvImageT<T> & kernel, const OvImageT<T> & input)
 {
@@ -1221,6 +1288,23 @@ T medianFilter2DHelperFunc_FindMedian(int n, T*elements)
 }
 
 
+/** 
+* @relates OvImageT
+* Performs 2D median filtering on the input image, i.e., every output pixel is set to the median value within a rectangular block of pixels around it.
+* 
+* <p> e.g., 
+* <br> i2 = medianFilter2D(i1, 5, 5); 
+* </p>
+* @param input the input image
+* @param filterHeight height of the median filter
+* @param filterWidth width of the median filter
+* @return filtered image
+* @see minFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see maxFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see meanFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see filter2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+* @see convolve2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
 {
@@ -1269,6 +1353,23 @@ const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, i
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Performs 2D minimum filtering on the input image, i.e., every output pixel is set to the minimum value within a rectangular block of pixels around it.
+* 
+* <p> e.g., 
+* <br> i2 = minFilter2D(i1, 5, 5); 
+* </p>
+* @param input the input image
+* @param filterHeight height of the filter
+* @param filterWidth width of the filter
+* @return filtered image
+* @see medianFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see maxFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see meanFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see filter2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+* @see convolve2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> minFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
 {
@@ -1313,6 +1414,23 @@ const OvImageT<T> minFilter2D (const OvImageT<T> & input, int filterHeight, int 
 }
 
 
+/** 
+* @relates OvImageT
+* Performs 2D maximum filtering on the input image, i.e., every output pixel is set to the maximum value within a rectangular block of pixels around it.
+* 
+* <p> e.g., 
+* <br> i2 = maxFilter2D(i1, 5, 5); 
+* </p>
+* @param input the input image
+* @param filterHeight height of the filter
+* @param filterWidth width of the filter
+* @return filtered image
+* @see medianFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see minFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see meanFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see filter2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+* @see convolve2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> maxFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
 {
@@ -1356,6 +1474,23 @@ const OvImageT<T> maxFilter2D (const OvImageT<T> & input, int filterHeight, int 
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Performs 2D mean filtering on the input image, i.e., every output pixel is set to the mean value of a rectangular block of pixels around it.
+* 
+* <p> e.g., 
+* <br> i2 = meanFilter2D(i1, 5, 5); 
+* </p>
+* @param input the input image
+* @param filterHeight height of the filter
+* @param filterWidth width of the filter
+* @return filtered image
+* @see medianFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see minFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see maxFilter2D(const OvImageT<T> & input, int filterHeight, int filterWidth)
+* @see filter2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+* @see convolve2D(const OvImageT<T> & kernel, const OvImageT<T> & input)
+*/
 template<typename T> 
 const OvImageT<T> meanFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
 {
@@ -1374,7 +1509,21 @@ const OvImageT<T> meanFilter2D (const OvImageT<T> & input, int filterHeight, int
 	return result;
 }
 
-
+/** 
+* @relates OvImageT
+* Sums image pixels along a particular dimension (1 = sum rows, 2 = sum columns, 3 = sum channels)
+* 
+* <p> e.g., 
+* <br> i2 = sum(i1,3); 
+* <br> Here, i2 has the same height and width as i1, but only one color channel (since we have summed all color channels together)
+* <br>
+* <br> i2 = sum(i1,1); 
+* <br> Here, i2 has the same width and channels as i1, but only one row (since we have summed all rows together)
+* </p>
+* @param input the input image
+* @param dimension the dimension to sum along [1 = sum rows, 2 = sum columns, 3 = sum channels(default)]
+* @return summed image
+*/
 template<typename T> 
 const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
 {
@@ -1419,6 +1568,21 @@ const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Computes mean of image pixels along a particular dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* 
+* <p> e.g., 
+* <br> i2 = mean(i1,3); 
+* <br> Here, i2 has the same height and width as i1, but only one color channel (since we have averaged all color channels together)
+* <br>
+* <br> i2 = mean(i1,1); 
+* <br> Here, i2 has the same width and channels as i1, but only one row (since we have averaged all rows together)
+* </p>
+* @param input the input image
+* @param dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* @return image
+*/
 template<typename T> 
 const OvImageT<T> mean(const OvImageT<T> & input, int dimension = 3)
 {
@@ -1463,6 +1627,21 @@ const OvImageT<T> mean(const OvImageT<T> & input, int dimension = 3)
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Computes minimum of image pixels along a particular dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* 
+* <p> e.g., 
+* <br> i2 = min(i1,3); 
+* <br> Here, i2 has the same height and width as i1, but only one color channel 
+* <br>
+* <br> i2 = min(i1,1); 
+* <br> Here, i2 has the same width and channels as i1, but only one row 
+* </p>
+* @param input the input image
+* @param dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* @return image
+*/
 template<typename T> 
 const OvImageT<T> min(const OvImageT<T> & input, int dimension = 3)
 {
@@ -1507,6 +1686,21 @@ const OvImageT<T> min(const OvImageT<T> & input, int dimension = 3)
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Computes maximum of image pixels along a particular dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* 
+* <p> e.g., 
+* <br> i2 = max(i1,3); 
+* <br> Here, i2 has the same height and width as i1, but only one color channel 
+* <br>
+* <br> i2 = max(i1,1); 
+* <br> Here, i2 has the same width and channels as i1, but only one row 
+* </p>
+* @param input the input image
+* @param dimension [1 = along rows, 2 = along columns, 3 = along color channels (default)]
+* @return image
+*/
 template<typename T> 
 const OvImageT<T> max(const OvImageT<T> & input, int dimension = 3)
 {
@@ -1552,7 +1746,16 @@ const OvImageT<T> max(const OvImageT<T> & input, int dimension = 3)
 }
 
 
-
+/** 
+* @relates OvImageT
+* Transposes the image. Each color channel is independently transposed.
+* 
+* <p> e.g., 
+* <br> i2 = transpose(i1); 
+* </p>
+* @param input the input image
+* @return transposed image
+*/
 template<typename T> 
 const OvImageT<T> transpose(const OvImageT<T> & input)
 {
@@ -1573,6 +1776,16 @@ const OvImageT<T> transpose(const OvImageT<T> & input)
 	
 }
 
+/** 
+* @relates OvImageT
+* Flips image left-to-right (i.e., about a vertical axis).
+* 
+* <p> e.g., 
+* <br> i2 = flipLR(i1); 
+* </p>
+* @param input the input image
+* @return flipped image
+*/
 template<typename T> 
 const OvImageT<T> flipLR(const OvImageT<T> & input)
 {
@@ -1590,6 +1803,16 @@ const OvImageT<T> flipLR(const OvImageT<T> & input)
 	return result;	
 }
 
+/** 
+* @relates OvImageT
+* Flips image upside-down (i.e., about a horizontal axis).
+* 
+* <p> e.g., 
+* <br> i2 = flipUD(i1); 
+* </p>
+* @param input the input image
+* @return flipped image
+*/
 template<typename T> 
 const OvImageT<T> flipUD(const OvImageT<T> & input)
 {
@@ -1607,6 +1830,15 @@ const OvImageT<T> flipUD(const OvImageT<T> & input)
 	return result;	
 }
 
+/** 
+* @relates OvImageT
+* Converts multi-channel color image to single-channel gray image by averaging channels.
+* <p> e.g., 
+* <br> i2 = rgb2gray(i1); 
+* </p>
+* @param input the input image
+* @return gray image
+*/
 template<typename T> 
 const OvImageT<T> rgb2gray(const OvImageT<T> & input)
 {
@@ -1617,6 +1849,19 @@ const OvImageT<T> rgb2gray(const OvImageT<T> & input)
 	return result;	
 }
 
+/** 
+* @relates OvImageT
+* Tiles input image <b>height</b> times along rows, <b>width</b> times along columns and <b>channels</b> times along color channels.
+* <p> e.g., 
+* <br> i2 = repmat(i1,2,2,1);
+* <br> Here, i2 is twice as large as i1, and is basically a 2x2 tiled copy of i1.
+* </p>
+* @param input the input image
+* @param height number of vertical tiles (default = 1)
+* @param width number of horizontal tiles (default = 1)
+* @param channels number of color channel tiles (default = 1)
+* @return image
+*/
 template<typename T> 
 const OvImageT<T> repmat (const OvImageT<T> & input, int height=1, int width=1, int channels=1)
 {
@@ -1635,6 +1880,19 @@ const OvImageT<T> repmat (const OvImageT<T> & input, int height=1, int width=1, 
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Creates a translated copy of an image.
+* <p> e.g., 
+* <br> i2 = shiftImageXY(i1,10,20);
+* <br> Here, i2 is i1 shifted vertically down by 10 pixels and to the right by 20 pixels.
+* <br> Note: i1 and i2 have the same dimensions.
+* </p>
+* @param input the input image
+* @param rows vertical translation in pixels (default = 0)
+* @param columns horizontal translation in pixels (default = 0)
+* @return translated image
+*/
 template<typename T> 
 const OvImageT<T> shiftImageXY (const OvImageT<T> & input, int rows=0, int columns=0)
 {	
@@ -1657,6 +1915,20 @@ const OvImageT<T> shiftImageXY (const OvImageT<T> & input, int rows=0, int colum
 	return result;	
 }
 
+/** 
+* @relates OvImageT
+* Rescales the input image by a certain scale using the nearest-neighbor method and optional pre-smoothing.
+* <p> e.g., 
+* <br> i2 = resizeNearestNbr(i1, 0.5, true);
+* <br> Here, i2 is half the size of i1 and presmoothing is set to true.
+* <br> Pre-smoothing performs appropriate gaussian smoothing before rescaling and gives better results but is slower.
+* </p>
+* @param input the input image
+* @param scale the magnification factor (in the range 0.01 to 100)
+* @param preSmooth if true performs gaussian pre-smoothing. if false (default), no smoothing is performed.
+* @return image
+* @see resizeBilinear(const OvImageT<T> & input, double scale, bool preSmooth)
+*/
 template<typename T> 
 const OvImageT<T> resizeNearestNbr(const OvImageT<T> & input, double scale, bool preSmooth=false)
 {
@@ -1691,6 +1963,20 @@ const OvImageT<T> resizeNearestNbr(const OvImageT<T> & input, double scale, bool
 	return result;
 }
 
+/** 
+* @relates OvImageT
+* Rescales the input image by a certain scale using bilinear interpolation and optional pre-smoothing.
+* <p> e.g., 
+* <br> i2 = resizeBilinear(i1, 0.5, true);
+* <br> Here, i2 is half the size of i1 and presmoothing is set to true.
+* <br> Pre-smoothing performs appropriate gaussian smoothing before rescaling and gives better results but is slower.
+* </p>
+* @param input the input image
+* @param scale the magnification factor (in the range 0.01 to 100)
+* @param preSmooth if true performs gaussian pre-smoothing. if false (default), no smoothing is performed.
+* @return image
+* @see resizeNearestNbr(const OvImageT<T> & input, double scale, bool preSmooth)
+*/
 template<typename T> 
 const OvImageT<T> resizeBilinear(const OvImageT<T> & input, double scale, bool preSmooth=false)
 {	
@@ -1864,3 +2150,5 @@ void OvImageT<T> ::setToGaborY(int size, double sigma, double period, double pha
 
 	(*this) /= (T) normalizer;
 }
+
+#endif //__OVIMAGET_CPP
