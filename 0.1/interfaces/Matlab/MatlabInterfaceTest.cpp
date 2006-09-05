@@ -13,19 +13,20 @@ void flipImage(OvImageAdapter & image)
 	image.getSize(height,width,ncolors);
 	image.getDataType(dataType);
 
-	mexPrintf("----- Image info -----\n");
-	mexPrintf("Height: %d, Width: %d, Ncolors: %d\n", height, width, ncolors);
+	printf("----- Image info -----\n");
+	printf("Height: %d, Width: %d, Ncolors: %d\n", height, width, ncolors);
 	printf("DataType: %d\n", dataType);
 
-	float temp1[4], temp2[4];
+	double temp1, temp2;
 
 	for(int i=0; i<height/2; i++)
 	for(int j=0; j<width; j++)
+	for(int k=0; k<ncolors; k++)
 	{
-		image.getPixel(temp1,height-i-1,j);
-		image.getPixel(temp2,i,j);
-		image.setPixel(temp2,height-i-1,j);
-		image.setPixel(temp1,i,j);		
+		temp1 = image.getPixel(height-i-1,j,k);
+		temp2 = image.getPixel(i,j,k);
+		image.setPixel(temp2,height-i-1,j,k);
+		image.setPixel(temp1,i,j,k);		
 	}
 
 }

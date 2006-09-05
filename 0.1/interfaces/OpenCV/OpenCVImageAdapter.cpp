@@ -64,33 +64,34 @@ OpenCVImageAdapter::~OpenCVImageAdapter()
 {
 }
 
-void OpenCVImageAdapter::getPixel(float * value, int row, int column)
+
+double OpenCVImageAdapter::getPixel(int row, int column, int channel) const
 {	
-	(this->*getPixelfptr)(value, row, column);	
+	if((row<0)||(row>=mHeight)) return 0;
+	if((column<0)||(column>=mWidth)) return 0;
+	if((channel<0)||(channel>=mChannels)) return 0;
+
+	return (double) (this->*getPixelfptr)(row, column, channel);	
 }
 
-void OpenCVImageAdapter::setPixel(float * value, int row, int column)
+void OpenCVImageAdapter::setPixel(double value, int row, int column, int channel)
 {	
-	(this->*setPixelfptr)(value, row, column);
+	if((row<0)||(row>=mHeight)) return;
+	if((column<0)||(column>=mWidth)) return;
+	if((channel<0)||(channel>=mChannels)) return;
+
+	(this->*setPixelfptr)(value, row, column, channel);
 }
 
-template<class T> void OpenCVImageAdapter::getPixelT(float * value, int row, int column)
+template<class T> double OpenCVImageAdapter::getPixelT(int row, int column, int channel) const
 {
 	T*temp = &((T*)(mIplImage->imageData + mIplImage->widthStep*row))[column*mChannels];
-	for(int i=0;i<mChannels;i++)
-	{
-		value[i] = (float) *temp; 
-		temp++;
-	}
+	return (double) temp[channel];
 }
 
-template<class T> void OpenCVImageAdapter::setPixelT(float * value, int row, int column)
+template<class T> void OpenCVImageAdapter::setPixelT(double value, int row, int column, int channel)
 {
 	T*temp = &((T*)(mIplImage->imageData + mIplImage->widthStep*row))[column*mChannels];
-	for(int i=0;i<mChannels;i++)
-	{
-		*temp = (T) value[i]; 
-		temp++;
-	}
+	temp[channel] = (T) value;
 }
 

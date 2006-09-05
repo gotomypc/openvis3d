@@ -24,9 +24,8 @@ public:
 	virtual void getSize(int & height, int & width, int & nColorChannels);
 	virtual void getDataType(OvImageAdapter::OvDataType & dataType);
 
-	virtual void getPixel(float * value, int row, int column) = 0;
-	virtual void setPixel(float * value, int row, int column) = 0;
-
+	virtual double getPixel(int row, int column, int channel) const = 0;
+	virtual void   setPixel(double value, int row, int column, int channel) = 0;
 
 protected:
 	int  mHeight;			//height of the image

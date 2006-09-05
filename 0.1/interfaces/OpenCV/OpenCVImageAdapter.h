@@ -10,17 +10,17 @@ public:
 	OpenCVImageAdapter(IplImage*im = 0);
 	virtual ~OpenCVImageAdapter();
 
-	virtual void getPixel(float * value, int row, int column);
-	virtual void setPixel(float * value, int row, int column);	
+	virtual double getPixel(int row, int column, int channel) const;
+	virtual void   setPixel(double value, int row, int column, int channel);
 
 protected:
 	IplImage*mIplImage;	
 
-	void (OpenCVImageAdapter::*getPixelfptr) (float * value, int row, int column);
-	void (OpenCVImageAdapter::*setPixelfptr) (float * value, int row, int column);
+	double (OpenCVImageAdapter::*getPixelfptr) (int row, int column, int channel) const;
+	void   (OpenCVImageAdapter::*setPixelfptr) (double value, int row, int column, int channel);
 
-	template<class T> void getPixelT(float * value, int row, int column);
-	template<class T> void setPixelT(float * value, int row, int column);
+	template<typename T> double getPixelT(int row, int column, int channel) const;
+	template<typename T> void   setPixelT(double value, int row, int column, int channel);
 };
 
 #endif
