@@ -13,18 +13,18 @@ public:
 	MatlabImageAdapter(mxArray*im = 0);
 	virtual ~MatlabImageAdapter();
 
-	virtual void getPixel(float * value, int row, int column);
-	virtual void setPixel(float * value, int row, int column);	
+	virtual double getPixel(int row, int column, int channel) const;
+	virtual void   setPixel(double value, int row, int column, int channel);
 
 protected:
 	mxArray* mMatlabImage;	
 	void * mImageDataPtr;
 
-	void (MatlabImageAdapter::*getPixelfptr) (float * value, int row, int column);
-	void (MatlabImageAdapter::*setPixelfptr) (float * value, int row, int column);
+	double (MatlabImageAdapter::*getPixelfptr) (int row, int column, int channel) const;
+	void (MatlabImageAdapter::*setPixelfptr) (double value, int row, int column, int channel);
 
-	template<class T> void getPixelT(float * value, int row, int column);
-	template<class T> void setPixelT(float * value, int row, int column);
+	template<class T> double getPixelT(int row, int column, int channel) const;
+	template<class T> void setPixelT(double value, int row, int column, int channel);
 };
 
 #endif

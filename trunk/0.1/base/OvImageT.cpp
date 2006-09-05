@@ -3,6 +3,11 @@
 #include <cstdio>
 #include <iostream>
 
+inline int round(double value)
+{
+	return int(value + 0.5);
+}
+
 template<typename T>
 OvImageT<T>::OvImageT()
 : mHeight(0), mWidth(0), mChannels(0), mSize(0), mHeightTimesWidth(0), mData(0)
@@ -134,6 +139,49 @@ OvImageT<T>::~OvImageT()
 	if(mData!=0) delete [] mData;
 }
 
+
+
+template<typename T>
+bool OvImageT<T>::copyFromAdapter(OvImageAdapter & iadapter)
+{
+	int i,j,k;
+	int height, width, ncolors;
+	iadapter.getSize(height, width, ncolors);
+	resetDimensions(height,width,ncolors);
+	
+	if((height!=mHeight)||(width!=mWidth)||(ncolors!=mChannels)) return false;
+
+	for(k=0; k<mChannels;k++)
+		for(j=0; j<mWidth;j++)
+			for(i=0; i<mHeight;i++)
+			{
+				(*this)(i,j,k) = (T) iadapter.getPixel(i,j,k); 
+			}
+	
+	return true;
+}
+
+template<typename T>
+bool OvImageT<T>::copyToAdapter(OvImageAdapter & iadapter)
+{
+	int i,j,k;
+	int height, width, ncolors;
+	iadapter.getSize(height, width, ncolors);
+	
+	if((height!=mHeight)||(width!=mWidth)||(ncolors!=mChannels)) return false;
+
+	for(k=0; k<mChannels;k++) 
+		for(j=0; j<mWidth;j++)
+			for(i=0; i<mHeight;i++)
+			{
+				iadapter.setPixel((double)(*this)(i,j,k),i,j,k);
+			}
+	
+	return true;
+}
+
+
+
 template<typename T>
 void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels) const
 {
@@ -185,7 +233,7 @@ void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 
 
 template<typename T>
-void OvImageT<T>::fillWithRandomNumbers(double multiplier)
+void OvImageT<T>::setToRandom(double multiplier)
 {
 	multiplier = multiplier/RAND_MAX;
 	for(int i=0; i<mSize; i++) mData[i] = (T) multiplier*rand();
@@ -288,6 +336,74 @@ OvImageT<T>& OvImageT<T>::operator = (const T & rhs)
 {
 	for(int i=0;i<mSize; i++) mData[i] = rhs;
 	return (*this);
+}
+
+template<typename T>
+bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const OvImageT<T> & srcImage)
+{
+	int maskHeight, maskWidth, maskChannels, srcHeight, srcWidth, srcChannels;
+	
+	mask.getDimensions(maskHeight,maskWidth,maskChannels);
+	srcImage.getDimensions(srcHeight,srcWidth,srcChannels);
+
+	if((mHeight!=maskHeight)||(mWidth!=maskWidth)||(mChannels!=maskChannels)) return false;		
+	if((mHeight!=srcHeight)||(mWidth!=srcWidth)||(mChannels!=srcChannels)) return false;		
+
+	for(int k=0; k<mChannels;k++)
+		for(int j=0; j<mWidth;j++)
+			for(int i=0; i<mHeight;i++)
+			{
+				if(mask(i,j,k)) (*this)(i,j,k) = srcImage(i,j,k);
+			}
+
+	return true;
+}
+
+template<typename T>
+bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const T & value)
+{
+	int maskHeight, maskWidth, maskChannels;
+	mask.getDimensions(maskHeight,maskWidth,maskChannels);
+	if((mHeight!=maskHeight)||(mWidth!=maskWidth)||(mChannels!=maskChannels)) return false;		
+
+	for(int k=0; k<mChannels;k++)
+		for(int j=0; j<mWidth;j++)
+			for(int i=0; i<mHeight;i++)
+			{
+				if(mask(i,j,k)) (*this)(i,j,k) = value;
+			}
+	return true;
+}
+
+template<typename T>
+const OvImageT<T> OvImageT<T>::getSubImage(int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi)
+{
+	int i,j,k,width,height,nchannels;
+	OvImageT<T> result;
+
+	if(rowLo<0) rowLo = 0; if(rowLo>=mHeight) rowLo = mHeight-1;
+	if(rowHi<0) rowHi = mHeight-1; if(rowHi>=mHeight) rowHi = mHeight-1;	
+	if(columnLo<0) columnLo = 0; if(columnLo>=mWidth) columnLo = mWidth-1;
+	if(columnHi<0) columnHi = mWidth-1; if(columnHi>=mWidth) columnHi = mWidth-1;	
+	if(channelLo<0) channelLo = 0; if(channelLo>=mChannels) channelLo = mChannels-1;
+	if(channelHi<0) channelHi = mChannels-1; if(channelHi>=mChannels) channelHi = mChannels-1;	
+	
+	height = rowHi-rowLo+1;
+	width  = columnHi-columnLo+1;
+	nchannels = channelHi-channelLo+1;
+
+	if(height<=0) return result;
+	if(width<=0) return result;
+	if(nchannels<=0) return result;
+
+	result.resetDimensions(height,width,nchannels);
+
+	for(k=channelLo;k<=channelHi;k++)
+		for(j=columnLo;j<=columnHi;j++)
+			for(i=rowLo;i<=rowHi;i++)
+				result(i-rowLo,j-columnLo,k-channelLo) = (*this)(i,j,k);
+	
+	return result;
 }
 
 
@@ -557,6 +673,210 @@ const OvImageT<T> operator / (const OvImageT<T> & i1, const double i2)
 	result /= (T)i2;
 	return result;
 }
+
+template<typename T>
+const OvImageT<bool> operator < (const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] < i2.mData[i]);
+	}
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator < (const double i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i2.mHeight,i2.mWidth,i2.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1 < i2.mData[i]);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator < (const OvImageT<T> & i1, const double i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] < i2);
+
+	return result;
+}
+
+
+template<typename T>
+const OvImageT<bool> operator <= (const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] <= i2.mData[i]);
+	}
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator <= (const double i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i2.mHeight,i2.mWidth,i2.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1 <= i2.mData[i]);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator <= (const OvImageT<T> & i1, const double i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] <= i2);
+
+	return result;
+}
+
+
+template<typename T>
+const OvImageT<bool> operator > (const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] > i2.mData[i]);
+	}
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator > (const double i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i2.mHeight,i2.mWidth,i2.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1 > i2.mData[i]);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator > (const OvImageT<T> & i1, const double i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] > i2);
+
+	return result;
+}
+
+
+template<typename T>
+const OvImageT<bool> operator >= (const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] >= i2.mData[i]);
+	}
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator >= (const double i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i2.mHeight,i2.mWidth,i2.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1 >= i2.mData[i]);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator >= (const OvImageT<T> & i1, const double i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] >= i2);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator == (const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] == i2.mData[i]);
+	}
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator == (const double i1, const OvImageT<T> & i2)
+{
+	OvImageT<bool> result(i2.mHeight,i2.mWidth,i2.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1 == i2.mData[i]);
+
+	return result;
+}
+
+template<typename T>
+const OvImageT<bool> operator == (const OvImageT<T> & i1, const double i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] == i2);
+
+	return result;
+}
+
+const OvImageT<bool> OvImageT<bool>::operator ! () const
+{
+	OvImageT<bool> result(*this); 
+
+	for(int i=0; i<result.mSize; i++)
+		result.mData[i] = !result.mData[i];
+
+	return (result); 
+}
+
+const OvImageT<bool> operator && (const OvImageT<bool> & i1, const OvImageT<bool> & i2)
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] && i2.mData[i]);
+	}
+
+	return result;
+}
+
+
+const OvImageT<bool> operator || (const OvImageT<bool> & i1, const OvImageT<bool> & i2) 
+{
+	OvImageT<bool> result(i1.mHeight,i1.mWidth,i1.mChannels);
+
+	if((i1.mHeight==i2.mHeight) && (i1.mWidth==i2.mWidth) && (i1.mChannels==i2.mChannels))
+	{
+		for(int i=0; i<result.mSize;i++) result.mData[i] = (i1.mData[i] || i2.mData[i]);
+	}
+
+	return result;
+}
+
 
 template<typename T>
 T OvImageT<T>::sumRegion(int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi)
@@ -950,6 +1270,112 @@ const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, i
 }
 
 template<typename T> 
+const OvImageT<T> minFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
+{
+	int iResult,jResult,k,iKernel,jKernel,iInput,jInput,iKernelMidpoint,jKernelMidpoint;
+	T resultValue, tempValue;
+
+	OvImageT<T> result(input,false); //create same-sized copy without copying contents
+
+	if(input.mSize==0) return result;
+	if((filterHeight<1)||(filterWidth<1)) return result;
+	
+	iKernelMidpoint = filterHeight/2;
+	jKernelMidpoint = filterWidth/2;
+
+	for(k=0;k<result.mChannels;k++)
+		for(jResult=0;jResult<result.mWidth;jResult++)
+			for(iResult=0;iResult<result.mHeight;iResult++)
+			{
+				resultValue = input(iResult,jResult,k);
+
+				for(jKernel=0; jKernel<filterWidth; jKernel++)
+				{
+					jInput = jResult + (jKernel-jKernelMidpoint); 
+					if((jInput<0)||(jInput>=input.mWidth)) continue;
+
+					for(iKernel=0; iKernel<filterHeight; iKernel++)
+					{
+						iInput = iResult + (iKernel-iKernelMidpoint); 
+						if((iInput<0)||(iInput>=input.mHeight)) continue;
+
+						tempValue = input(iInput,jInput,k);
+						if(tempValue!=tempValue) continue; //check if value is NaN
+
+						if(resultValue>tempValue) resultValue = tempValue;
+					}
+				}				
+
+				result(iResult,jResult,k) = resultValue;
+			}
+	
+	return result;
+}
+
+
+template<typename T> 
+const OvImageT<T> maxFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
+{
+	int iResult,jResult,k,iKernel,jKernel,iInput,jInput,iKernelMidpoint,jKernelMidpoint;
+	T resultValue, tempValue;
+
+	OvImageT<T> result(input,false); //create same-sized copy without copying contents
+
+	if(input.mSize==0) return result;
+	if((filterHeight<1)||(filterWidth<1)) return result;
+	
+	iKernelMidpoint = filterHeight/2;
+	jKernelMidpoint = filterWidth/2;
+
+	for(k=0;k<result.mChannels;k++)
+		for(jResult=0;jResult<result.mWidth;jResult++)
+			for(iResult=0;iResult<result.mHeight;iResult++)
+			{
+				resultValue = input(iResult,jResult,k);
+
+				for(jKernel=0; jKernel<filterWidth; jKernel++)
+				{
+					jInput = jResult + (jKernel-jKernelMidpoint); 
+					if((jInput<0)||(jInput>=input.mWidth)) continue;
+
+					for(iKernel=0; iKernel<filterHeight; iKernel++)
+					{
+						iInput = iResult + (iKernel-iKernelMidpoint); 
+						if((iInput<0)||(iInput>=input.mHeight)) continue;
+
+						tempValue = input(iInput,jInput,k);
+						if(tempValue!=tempValue) continue; //check if value is NaN
+
+						if(resultValue<tempValue) resultValue = tempValue;
+					}
+				}				
+
+				result(iResult,jResult,k) = resultValue;
+			}
+	
+	return result;
+}
+
+template<typename T> 
+const OvImageT<T> meanFilter2D (const OvImageT<T> & input, int filterHeight, int filterWidth)
+{
+	OvImageT<T> result; 
+	OvImageT<T> kernel;
+
+	if(input.mSize==0) return result;
+	if((filterHeight<1)||(filterWidth<1)) return result;
+	
+	kernel.resetDimensions(filterHeight, filterWidth);
+	kernel = 1;
+	kernel /= kernel.L1Norm();
+
+	result = filter2D(kernel,input);
+	
+	return result;
+}
+
+
+template<typename T> 
 const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
 {
 	OvImageT<T> result;
@@ -1210,6 +1636,113 @@ const OvImageT<T> repmat (const OvImageT<T> & input, int height=1, int width=1, 
 }
 
 template<typename T> 
+const OvImageT<T> shiftImageXY (const OvImageT<T> & input, int rows=0, int columns=0)
+{	
+	OvImageT<T> result(input,false);
+	int i,j,k, iLow, iHigh, jLow, jHigh;
+
+	if(rows>=0) {iLow = rows; iHigh = result.mHeight;}
+	else {iLow = 0; iHigh = result.mHeight-rows;}
+
+	if(columns>=0) {jLow = columns; jHigh = result.mWidth;}
+	else {jLow = 0; jHigh = result.mWidth-columns;}
+
+	for(k=0; k<result.mChannels;k++)
+		for(j=jLow; j<jHigh;j++)
+			for(i=iLow; i<iHigh;i++)
+			{
+				result(i,j,k) = input(i-rows,j-columns,k); //translate
+			}
+
+	return result;	
+}
+
+template<typename T> 
+const OvImageT<T> resizeNearestNbr(const OvImageT<T> & input, double scale, bool preSmooth=false)
+{
+	int i,j,k;
+	OvImageT<T> result, intermediate, kernel;
+	if((scale<0.01)||(scale>100)) return result; //enforce scaling limits: pretty large limits :)
+
+	result.resetDimensions((int)floor(input.mHeight*scale),(int)floor(input.mWidth*scale),input.mChannels);
+
+	if(preSmooth && (scale<1)) //smooth if presmooth is set and we are shrinking only; no need to smooth when magnifying image
+	{
+		kernel.setToGaussian((int)ceil((1/scale)*3),1/scale);
+		intermediate = filter2D(kernel,input);		
+
+		for(k=0; k<result.mChannels;k++)
+			for(j=0; j<result.mWidth;j++)
+				for(i=0; i<result.mHeight;i++)
+				{
+					result(i,j,k) = (T) intermediate(round(i/scale),round(j/scale),k); //scale
+				}		
+	}
+	else
+	{
+		for(k=0; k<result.mChannels;k++)
+			for(j=0; j<result.mWidth;j++)
+				for(i=0; i<result.mHeight;i++)
+				{
+					result(i,j,k) = (T) input(round(i/scale),round(j/scale),k); //scale
+				}		
+	}
+
+	return result;
+}
+
+template<typename T> 
+const OvImageT<T> resizeBilinear(const OvImageT<T> & input, double scale, bool preSmooth=false)
+{	
+	int i,j,k;
+	double iInput,jInput;
+	int iInputLo,jInputLo,iInputHi,jInputHi;
+	T interp1, interp2;
+
+	OvImageT<T> result, intermediate, kernel;
+	if((scale<0.01)||(scale>100)) return result; //enforce scaling limits: pretty large limits :)
+
+	result.resetDimensions((int)floor(input.mHeight*scale),(int)floor(input.mWidth*scale),input.mChannels);
+
+	if(preSmooth && (scale<1)) //smooth if presmooth is set and we are shrinking only; no need to smooth when magnifying image
+	{
+		kernel.setToGaussian((int)ceil((1/scale)*3),1/scale);
+		intermediate = filter2D(kernel,input);		
+
+		for(k=0; k<result.mChannels;k++)
+			for(j=0; j<result.mWidth;j++)
+				for(i=0; i<result.mHeight;i++)
+				{
+					iInput = i/scale; iInputLo = (int)iInput; iInputHi = (int)(iInput+1);
+					jInput = j/scale; jInputLo = (int)jInput; jInputHi = (int)(jInput+1);
+
+					interp1 = (T) ((iInputHi-iInput)*intermediate(iInputLo,jInputLo,k) + (iInput-iInputLo)*intermediate(iInputHi,jInputLo,k));
+					interp2 = (T) ((iInputHi-iInput)*intermediate(iInputLo,jInputHi,k) + (iInput-iInputLo)*intermediate(iInputHi,jInputHi,k));
+
+					result(i,j,k) = (T) ((jInputHi-jInput)*interp1+(jInput-jInputLo)*interp2);
+				}		
+	}
+	else
+	{
+		for(k=0; k<result.mChannels;k++)
+			for(j=0; j<result.mWidth;j++)
+				for(i=0; i<result.mHeight;i++)
+				{
+					iInput = i/scale; iInputLo = (int)iInput; iInputHi = (int)(iInput+1);
+					jInput = j/scale; jInputLo = (int)jInput; jInputHi = (int)(jInput+1);
+
+					interp1 = (T) ((iInputHi-iInput)*input(iInputLo,jInputLo,k) + (iInput-iInputLo)*input(iInputHi,jInputLo,k));
+					interp2 = (T) ((iInputHi-iInput)*input(iInputLo,jInputHi,k) + (iInput-iInputLo)*input(iInputHi,jInputHi,k));
+
+					result(i,j,k) = (T) ((jInputHi-jInput)*interp1+(jInput-jInputLo)*interp2);
+				}		
+	}
+
+	return result;
+}
+
+
+template<typename T> 
 void OvImageT<T> ::setToMeshgridX (T x1, T x2, T y1, T y2, T dx, T dy)
 {
 	int i,j,height,width;
@@ -1248,7 +1781,7 @@ void OvImageT<T> ::setToMeshgridY (T x1, T x2, T y1, T y2, T dx, T dy)
 }
 
 template<typename T> 
-void OvImageT<T> ::setToGaussian(int size, float sigma)
+void OvImageT<T> ::setToGaussian(int size, double sigma)
 {
 	double x,y;
 	double halfsize;
@@ -1266,3 +1799,68 @@ void OvImageT<T> ::setToGaussian(int size, float sigma)
 	(*this) /= this->L1Norm();
 }
 
+template<typename T> 
+void OvImageT<T> ::setToGaborX(int size, double sigma, double period, double phaseshift=0)
+{
+	double x,y;
+	double halfsize, tempVal, normalizer;
+	double pi = 2 * acos(0.0);
+
+	if(size<=0) return;
+	if(sigma<=0) return;
+	if(period<=0) return;
+
+	phaseshift = phaseshift*pi/180; //convert phaseshift from degrees to radians
+
+	this->resetDimensions(size, size, 1); 
+	halfsize = (size-1)/2.0;	
+
+	normalizer = 0;
+	for(int j=0; j<mWidth; j++)
+		for(int i=0; i<mHeight; i++)
+		{
+			x = j-halfsize;
+			y = i-halfsize;
+		
+			tempVal = exp(-0.5*(x*x+y*y)/(sigma*sigma)); //gaussian envelope
+			normalizer += tempVal; //normalise using gaussian envelope only
+			
+			//now multiply by sinusoid to get gabor function
+			(*this)(i,j) = (T) (tempVal*sin(2.0*pi*x/period + phaseshift));
+		}	
+
+	(*this) /= (T) normalizer;
+}
+
+template<typename T> 
+void OvImageT<T> ::setToGaborY(int size, double sigma, double period, double phaseshift=0)
+{
+	double x,y;
+	double halfsize, tempVal, normalizer;
+	double pi = 2 * acos(0.0);
+
+	if(size<=0) return;
+	if(sigma<=0) return;
+	if(period<=0) return;
+
+	phaseshift = phaseshift*pi/180; //convert phaseshift from degrees to radians
+
+	this->resetDimensions(size, size, 1); 
+	halfsize = (size-1)/2.0;	
+
+	normalizer = 0;
+	for(int j=0; j<mWidth; j++)
+		for(int i=0; i<mHeight; i++)
+		{
+			x = j-halfsize;
+			y = i-halfsize;
+		
+			tempVal = exp(-0.5*(x*x+y*y)/(sigma*sigma)); //gaussian envelope
+			normalizer += tempVal; //normalise using gaussian envelope only
+			
+			//now multiply by sinusoid to get gabor function
+			(*this)(i,j) = (T) (tempVal*sin(2.0*pi*y/period + phaseshift));
+		}	
+
+	(*this) /= (T) normalizer;
+}

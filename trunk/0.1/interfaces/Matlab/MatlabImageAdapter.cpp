@@ -91,33 +91,33 @@ MatlabImageAdapter::~MatlabImageAdapter()
 {
 }
 
-void MatlabImageAdapter::getPixel(float * value, int row, int column)
-{	
-	(this->*getPixelfptr)(value, row, column);	
-}
-
-void MatlabImageAdapter::setPixel(float * value, int row, int column)
-{	
-	(this->*setPixelfptr)(value, row, column);
-}
-
-template<class T> void MatlabImageAdapter::getPixelT(float * value, int row, int column)
+double MatlabImageAdapter::getPixel(int row, int column, int channel) const
 {
-	T*temp = ((T*)mImageDataPtr) + column*mHeight + row;
-	for(int i=0;i<mChannels;i++)
-	{
-		value[i] = (float) *temp; 
-		temp+=(mHeight*mWidth);
-	}
+	if((row<0)||(row>=mHeight)) return 0;
+	if((column<0)||(column>=mWidth)) return 0;
+	if((channel<0)||(channel>=mChannels)) return 0;
+
+	return (this->*getPixelfptr)(row, column, channel);	
 }
 
-template<class T> void MatlabImageAdapter::setPixelT(float * value, int row, int column)
+void MatlabImageAdapter::setPixel(double value, int row, int column, int channel)
 {
-	T*temp = ((T*)mImageDataPtr) + column*mHeight + row;
-	for(int i=0;i<mChannels;i++)
-	{
-		*temp = (T) value[i]; 
-		temp+=(mHeight*mWidth);
-	}
+	if((row<0)||(row>=mHeight)) return;
+	if((column<0)||(column>=mWidth)) return;
+	if((channel<0)||(channel>=mChannels)) return;
+
+	(this->*setPixelfptr)(value, row, column, channel);
+}
+
+template<class T> double MatlabImageAdapter::getPixelT(int row, int column, int channel) const
+{
+	T*temp = ((T*)mImageDataPtr) + mHeight*mWidth*channel + column*mHeight + row;
+	return (double) *temp;
+}
+
+template<class T> void MatlabImageAdapter::setPixelT(double value, int row, int column, int channel)
+{
+	T*temp = ((T*)mImageDataPtr) + mHeight*mWidth*channel + column*mHeight + row;
+	*temp = (T)value;
 }
 

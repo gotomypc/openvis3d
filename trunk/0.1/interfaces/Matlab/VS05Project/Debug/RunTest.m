@@ -7,8 +7,6 @@ i1 = single(i1);
 i2 = MatlabInterfaceTest(i1);
 i1 = double(i1)/255;
 i2 = MatlabInterfaceTest(i1);
-
-I = imread('pout.tif');
 i1 = uint16(i1);
 i2 = MatlabInterfaceTest(i1);
 i1 = uint64(i1);
