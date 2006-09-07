@@ -1,5 +1,9 @@
 #include "MatlabImageAdapter.h"
 
+/**
+* Creates a wrapper around a Matlab image (i.e., mxArray) to allow OpenVis3D to easily access it.
+* @param im a pointer to an Matlab mxArray object
+*/
 MatlabImageAdapter::MatlabImageAdapter(mxArray*im)
 	: OvImageAdapter(), mMatlabImage(im), mImageDataPtr(0)
 {
@@ -74,23 +78,36 @@ MatlabImageAdapter::MatlabImageAdapter(mxArray*im)
 				break;
 			default:
 				mDataType = OV_DATA_UNKNOWN;
-				getPixelfptr = &MatlabImageAdapter::getPixelT<unsigned char>; 
-				setPixelfptr = &MatlabImageAdapter::setPixelT<unsigned char>;
+				getPixelfptr = &MatlabImageAdapter::getPixeldoNothing;
+				setPixelfptr = &MatlabImageAdapter::setPixeldoNothing;
 				break;
 		}
 	}
 	else
 	{
 		mDataType = OV_DATA_UNKNOWN;
-		getPixelfptr = &MatlabImageAdapter::getPixelT<unsigned char>; 
-		setPixelfptr = &MatlabImageAdapter::setPixelT<unsigned char>;
+		mHeight = 0;
+		mWidth  = 0;
+		mChannels = 0;
+		getPixelfptr = &MatlabImageAdapter::getPixeldoNothing;
+		setPixelfptr = &MatlabImageAdapter::setPixeldoNothing;
 	}
 }
 
+/**
+* Destructor.
+*/
 MatlabImageAdapter::~MatlabImageAdapter()
 {
 }
 
+/**
+* Returns a pixel value at a particular row, column and color channel.
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image
+* @return pixel value (type double)
+*/
 double MatlabImageAdapter::getPixel(int row, int column, int channel) const
 {
 	if((row<0)||(row>=mHeight)) return 0;
@@ -100,6 +117,13 @@ double MatlabImageAdapter::getPixel(int row, int column, int channel) const
 	return (this->*getPixelfptr)(row, column, channel);	
 }
 
+/**
+* Sets a pixel value at a particular row, column and color channel.
+* @param value value to be set
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image	
+*/
 void MatlabImageAdapter::setPixel(double value, int row, int column, int channel)
 {
 	if((row<0)||(row>=mHeight)) return;
@@ -109,15 +133,52 @@ void MatlabImageAdapter::setPixel(double value, int row, int column, int channel
 	(this->*setPixelfptr)(value, row, column, channel);
 }
 
+/**
+* Internal template function to handle any image datatype. Returns a pixel value at a particular row, column and color channel.
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image
+* @return pixel value (type double)
+*/
 template<class T> double MatlabImageAdapter::getPixelT(int row, int column, int channel) const
 {
 	T*temp = ((T*)mImageDataPtr) + mHeight*mWidth*channel + column*mHeight + row;
 	return (double) *temp;
 }
 
+/**
+* Internal template function to handle any image datatype. Sets a pixel value at a particular row, column and color channel.
+* @param value value to be set
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image	
+*/
 template<class T> void MatlabImageAdapter::setPixelT(double value, int row, int column, int channel)
 {
 	T*temp = ((T*)mImageDataPtr) + mHeight*mWidth*channel + column*mHeight + row;
 	*temp = (T)value;
 }
 
+/**
+* Dummy function for use when internal mxArray pointer is null or data type unknown.
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image
+* @return pixel value (type double)
+*/
+double MatlabImageAdapter::getPixeldoNothing(int row, int column, int channel) const
+{	
+	return (double) 0;
+}
+
+/**
+* Dummy function for use when internal mxArray pointer is null or data type unknown.
+* @param value value to be set
+* @param row row of the image
+* @param column column of the image
+* @param channel channel of the image
+*/
+void MatlabImageAdapter::setPixeldoNothing(double value, int row, int column, int channel)
+{
+	return;
+}

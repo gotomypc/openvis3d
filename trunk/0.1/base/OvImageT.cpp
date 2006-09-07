@@ -7,8 +7,6 @@
 #include <iostream>
 
 /**  Rounds to nearest integer
-* 
-* 
 * @param value	input value
 * @return the rounded value
 */
@@ -117,9 +115,10 @@ OvImageT<T>::OvImageT(const OvImageT<T>& srcImage, bool copyData)
 /** 
 * Copy constructor to copy between two different image template types T and C.
 * <p>e.g., 
-* <br>OvImageT<int> i1(2,3,1);
-* <br>OvImageT<float> i2(i1);
-* </p>
+* <pre>
+*   OvImageT<int> i1(2,3,1);
+*   OvImageT<float> i2(i1);
+* </pre>
 *
 * @param srcImage source image whose dimensions are to be copied (of a different template type)
 * @param copyData copies source data if set to true (default), otherwise returns zeroed image.
@@ -182,14 +181,28 @@ OvImageT<T>::OvImageT(const OvImageT<C>& srcImage, bool copyData)
 /** 
 * Destructor of OvImageT.
 */
-
 template<typename T>
 OvImageT<T>::~OvImageT()
 {
 	if(mData!=0) delete [] mData;
 }
 
-
+/**
+* Imports image from an OvImageAdapter (external image source).
+* @param iadapter a OvImageAdapter object
+* @return true if successful, false if failed
+*
+* <BR> e.g., import and export using OpenCVAdapter, a class derived from OvImageAdapter.
+* <pre>
+*    IplImage*img = cvLoadImage("test.jpg");
+*    OpenCVImageAdapter*opencvAdaptor = new OpenCVImageAdapter(img);
+*    OvImageT<float> i1;
+*    i1.copyFromAdapter(*opencvAdaptor); //Now the opencv image is copied to i1
+*    i1 = i1/2;	//divide all pixel values by 2
+*    i1.copyToAdapter(*opencvAdaptor); //copy back to opencv image
+* </pre>
+* @see copyToAdapter(OvImageAdapter & iadapter)
+*/
 template<typename T>
 bool OvImageT<T>::copyFromAdapter(OvImageAdapter & iadapter)
 {
@@ -210,6 +223,24 @@ bool OvImageT<T>::copyFromAdapter(OvImageAdapter & iadapter)
 	return true;
 }
 
+/**
+* Exports image to an OvImageAdapter (external image source).
+* Note: This function will export only if the OvImageAdapter image has the same dimensions as the source image.
+* It does not create or resize the OvImageAdapter.
+* @param iadapter a OvImageAdapter object
+* @return true if successful, false if failed
+*
+* <BR> e.g., import and export using OpenCVAdapter, a class derived from OvImageAdapter.
+* <pre>
+*    IplImage*img = cvLoadImage("test.jpg");
+*    OpenCVImageAdapter*opencvAdaptor = new OpenCVImageAdapter(img);
+*    OvImageT<float> i1;
+*    i1.copyFromAdapter(*opencvAdaptor); //Now the opencv image is copied to i1
+*    i1 = i1/2;	//divide all pixel values by 2
+*    i1.copyToAdapter(*opencvAdaptor); //copy back to opencv image
+* </pre>
+* @see copyFromAdapter(OvImageAdapter & iadapter)
+*/
 template<typename T>
 bool OvImageT<T>::copyToAdapter(OvImageAdapter & iadapter)
 {
@@ -229,8 +260,12 @@ bool OvImageT<T>::copyToAdapter(OvImageAdapter & iadapter)
 	return true;
 }
 
-
-
+/**
+* Returns the dimensions of the image.
+* @param height returns image height
+* @param width returns image width
+* @param nColorChannels returns number of channels
+*/
 template<typename T>
 void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels) const
 {
@@ -239,6 +274,16 @@ void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels)
 	nColorChannels = mChannels;
 }
 
+/**
+* Resets the image to the specified dimensions and zeroes all pixel values.
+* e.g.,
+* <pre>
+*   i1.resetDimensions(5,10,3);
+* </pre>
+* @param height image height
+* @param width image width
+* @param nColorChannels number of channels
+*/
 template<typename T>
 void OvImageT<T>::resetDimensions(int height, int width, int nColorChannels)
 {
@@ -268,6 +313,19 @@ void OvImageT<T>::resetDimensions(int height, int width, int nColorChannels)
 	mHeightTimesWidth = mWidth*mHeight;
 }
 
+/**
+* Reshapes the image without changing total size or pixel values.
+* Alters the height, width and channels only if their product is equal to the product of the existing values.
+* <br> i.e., only if height*width*channels = (old height)*(old width)*(old channels)
+* <br> e.g,
+* <pre>
+*   OvImageT<float> i1(2,8,1);
+*   i1.reshape(4,4,1);
+* </pre>
+* @param height image height
+* @param width image width
+* @param nColorChannels number of channels
+*/
 template<typename T>
 void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 {
@@ -280,26 +338,40 @@ void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 	}
 }
 
-
-template<typename T>
-void OvImageT<T>::setToRandom(double multiplier)
-{
-	multiplier = multiplier/RAND_MAX;
-	for(int i=0; i<mSize; i++) mData[i] = (T) multiplier*rand();
-}
-
+/** Access image data using a syntax like im(i,j,k) .
+* <p> e.g., 
+* <br> temp = im(1,2,1); //copy value of pixel at location row=1,col=2,channel=1 into variable temp
+* <br> OR
+* <br> im(1,2,0) = 5;
+*
+* @param row 
+* @param column 
+* @param channel
+*/
 template<typename T>
 inline T& OvImageT<T>::operator() (int row, int column, int channel)
 {
 	return *(mData + channel*mHeightTimesWidth + column*mHeight + row); 
 }
 
+/*
+	Const version of the above operator.
+*/
 template<typename T>
 inline T& OvImageT<T>::operator() (int row, int column, int channel) const
 {
 	return *(mData + channel*mHeightTimesWidth + column*mHeight + row); 
 }
 
+/**
+* Assignment operator to copy one image to another of the same data type.
+* e.g.,
+* <pre>
+*    OvImageT<float> i1(4,4,1);
+*    OvImageT<float> i2;
+*    i2 = i1;
+* </pre>
+*/
 template<typename T>
 OvImageT<T>& OvImageT<T>::operator = (const OvImageT<T> & rhsImage)
 {
@@ -335,6 +407,15 @@ OvImageT<T>& OvImageT<T>::operator = (const OvImageT<T> & rhsImage)
 	return (*this);
 }
 
+/**
+* Assignment operator to copy one image to another of a different data type.
+* e.g.,
+* <pre>
+*    OvImageT<float> i1(4,4,1);
+*    OvImageT<int> i2;
+*    i2 = i1;
+* </pre>
+*/
 template<typename T>
 template<typename C>
 OvImageT<T>& OvImageT<T>::operator = (const OvImageT<C> & rhsImage)
@@ -379,7 +460,14 @@ OvImageT<T>& OvImageT<T>::operator = (const OvImageT<C> & rhsImage)
 	return (*this);
 }
 
-
+/**
+* Assignment operator to set all values of an image to a given scalar.
+* e.g.,
+* <pre>
+*    OvImageT<float> i1(4,4,1);
+*    i1 = 4.2;
+* </pre>
+*/
 template<typename T>
 OvImageT<T>& OvImageT<T>::operator = (const T & rhs)
 {
@@ -387,6 +475,12 @@ OvImageT<T>& OvImageT<T>::operator = (const T & rhs)
 	return (*this);
 }
 
+/**
+* Import source image values using a boolean image mask. Values are copied wherever mask is true.
+* @param mask a boolean image mask having the same size as the srcImage
+* @param srcImage the source image
+* @return true if successful
+*/
 template<typename T>
 bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const OvImageT<T> & srcImage)
 {
@@ -408,6 +502,12 @@ bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const OvImageT<T> & sr
 	return true;
 }
 
+/**
+* Sets pixels equal to the input value wherever the mask is true.
+* @param mask a boolean image mask having the same size as the srcImage
+* @param value the scalar value to be assigned
+* @return true if successful
+*/
 template<typename T>
 bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const T & value)
 {
@@ -424,6 +524,20 @@ bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const T & value)
 	return true;
 }
 
+/**
+* Copies and returns a rectangular sub-block of the image.
+* e.g.,
+* <pre>
+*    i2 = i1(10,20,5,30,0,1); 
+* </pre>
+* @param rowLo starting row (if omitted or set to a negative value, the default value of 0 is used)
+* @param rowHi ending row (if omitted or set to a negative value, the default value used is (height-1) )
+* @param columnLo starting column (if omitted or set to a negative value, the default value of 0 is used)
+* @param columnHi ending column (if omitted or set to a negative value, the default value used is (width-1))
+* @param channelLo starting channel (if omitted or set to a negative value, the default value of 0 is used)
+* @param channelHi ending channel (if omitted or set to a negative value, the default value used is (number of channels-1))
+* @return the copied subimage
+*/
 template<typename T>
 const OvImageT<T> OvImageT<T>::getSubImage(int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi)
 {
@@ -926,61 +1040,6 @@ const OvImageT<bool> operator || (const OvImageT<bool> & i1, const OvImageT<bool
 	return result;
 }
 
-
-template<typename T>
-T OvImageT<T>::sumRegion(int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi)
-{
-	int i,j,k;
-	T result;
-
-	if(rowLo<0) rowLo = 0; if(rowLo>=mHeight) rowLo = mHeight-1;
-	if(rowHi<0) rowHi = mHeight-1; if(rowHi>=mHeight) rowHi = mHeight-1;	
-	if(columnLo<0) columnLo = 0; if(columnLo>=mWidth) columnLo = mWidth-1;
-	if(columnHi<0) columnHi = mWidth-1; if(columnHi>=mWidth) columnHi = mWidth-1;	
-	if(channelLo<0) channelLo = 0; if(channelLo>=mChannels) channelLo = mChannels-1;
-	if(channelHi<0) channelHi = mChannels-1; if(channelHi>=mChannels) channelHi = mChannels-1;	
-	
-	result = 0;
-
-	for(k=channelLo;k<=channelHi;k++)
-		for(j=columnLo;j<=columnHi;j++)
-			for(i=rowLo;i<=rowHi;i++)
-				result += (*this)(i,j,k);
-	
-	return result;
-}
-
-template<typename T>
-T OvImageT<T>::sumSingleChannel(int channel)
-{
-	if((channel<0)||(channel>=mChannels)) return 0;
-	return sumRegion(-1,-1,-1,-1,channel,channel);
-}
-
-template<typename T>
-T OvImageT<T>::sumAll(void)
-{
-	return sumRegion(-1,-1,-1,-1,-1,-1);
-}
-
-
-template<typename T>
-T OvImageT<T>::L1Norm(void)
-{
-	T result = 0;
-	for(int i=0; i<mSize; i++) result += (T) fabs(mData[i]);
-	return result;
-}
-
-template<typename T>
-T OvImageT<T>::L2Norm(void)
-{
-	T result = 0;
-	for(int i=0; i<mSize; i++) result += (mData[i]*mData[i]);
-	result = sqrt(result);
-	return result;
-}
-
 template<typename T> 
 const OvImageT<T> cos (const OvImageT<T> & i1)
 {
@@ -1174,7 +1233,13 @@ const OvImageT<T> sqrt (const OvImageT<T> & i1)
 /** 
 * @relates OvImageT
 * Performs 2D convolution on the input image with a given kernel.
-* 
+* <br> e.g., 
+* <pre>
+*   OvImageT<float> ikernel, input, iresult;
+*   input = random(0,100,50,50,1);
+*   ikernel = gaussian(7, 3);
+*   iresult = convolve2D(ikernel, input);
+* </pre>
 * @param kernel a 2D image used as a kernel for convolution
 * @param input the input image
 * @return convolved image
@@ -1222,7 +1287,13 @@ const OvImageT<T> convolve2D (const OvImageT<T> & kernel, const OvImageT<T> & in
 /** 
 * @relates OvImageT
 * Performs 2D filtering on the input image with a given kernel.
-* 
+* <br> e.g., 
+* <pre>
+*   OvImageT<float> ikernel, input, iresult;
+*   input = random(0,100,50,50,1);
+*   ikernel = gaussian(7, 3);
+*   iresult = filter2D(ikernel, input);
+* </pre>
 * @param kernel a 2D image used as a kernel for filtering
 * @param input the input image
 * @return filtered image
@@ -1293,7 +1364,9 @@ T medianFilter2DHelperFunc_FindMedian(int n, T*elements)
 * Performs 2D median filtering on the input image, i.e., every output pixel is set to the median value within a rectangular block of pixels around it.
 * 
 * <p> e.g., 
-* <br> i2 = medianFilter2D(i1, 5, 5); 
+* <pre> 
+*   i2 = medianFilter2D(i1, 5, 5); 
+* </pre>
 * </p>
 * @param input the input image
 * @param filterHeight height of the median filter
@@ -1358,7 +1431,9 @@ const OvImageT<T> medianFilter2D (const OvImageT<T> & input, int filterHeight, i
 * Performs 2D minimum filtering on the input image, i.e., every output pixel is set to the minimum value within a rectangular block of pixels around it.
 * 
 * <p> e.g., 
-* <br> i2 = minFilter2D(i1, 5, 5); 
+* <pre> 
+*   i2 = minFilter2D(i1, 5, 5); 
+* </pre>
 * </p>
 * @param input the input image
 * @param filterHeight height of the filter
@@ -1419,7 +1494,9 @@ const OvImageT<T> minFilter2D (const OvImageT<T> & input, int filterHeight, int 
 * Performs 2D maximum filtering on the input image, i.e., every output pixel is set to the maximum value within a rectangular block of pixels around it.
 * 
 * <p> e.g., 
-* <br> i2 = maxFilter2D(i1, 5, 5); 
+* <pre> 
+*   i2 = maxFilter2D(i1, 5, 5); 
+* </pre>
 * </p>
 * @param input the input image
 * @param filterHeight height of the filter
@@ -1479,7 +1556,9 @@ const OvImageT<T> maxFilter2D (const OvImageT<T> & input, int filterHeight, int 
 * Performs 2D mean filtering on the input image, i.e., every output pixel is set to the mean value of a rectangular block of pixels around it.
 * 
 * <p> e.g., 
-* <br> i2 = meanFilter2D(i1, 5, 5); 
+* <pre> 
+*   i2 = meanFilter2D(i1, 5, 5); 
+* </pre>
 * </p>
 * @param input the input image
 * @param filterHeight height of the filter
@@ -1506,65 +1585,6 @@ const OvImageT<T> meanFilter2D (const OvImageT<T> & input, int filterHeight, int
 
 	result = filter2D(kernel,input);
 	
-	return result;
-}
-
-/** 
-* @relates OvImageT
-* Sums image pixels along a particular dimension (1 = sum rows, 2 = sum columns, 3 = sum channels)
-* 
-* <p> e.g., 
-* <br> i2 = sum(i1,3); 
-* <br> Here, i2 has the same height and width as i1, but only one color channel (since we have summed all color channels together)
-* <br>
-* <br> i2 = sum(i1,1); 
-* <br> Here, i2 has the same width and channels as i1, but only one row (since we have summed all rows together)
-* </p>
-* @param input the input image
-* @param dimension the dimension to sum along [1 = sum rows, 2 = sum columns, 3 = sum channels(default)]
-* @return summed image
-*/
-template<typename T> 
-const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
-{
-	OvImageT<T> result;
-	int i,j,k;
-	T tempVal;
-
-	if((dimension<1)||(dimension>3)) dimension = 3;
-	switch(dimension)
-	{
-		case 1:
-			result.resetDimensions(1, input.mWidth, input.mChannels);
-			for(k=0; k<input.mChannels;k++)
-				for(j=0; j<input.mWidth;j++)
-				{
-					tempVal = 0;
-					for(i=0; i<input.mHeight;i++) tempVal+=input(i,j,k);
-					result(0,j,k) = tempVal;
-				}					
-			break;
-		case 2:
-			result.resetDimensions(input.mHeight, 1, input.mChannels);
-			for(k=0; k<input.mChannels;k++)
-				for(i=0; i<input.mHeight;i++)
-				{
-					tempVal = 0;
-					for(j=0; j<input.mWidth;j++) tempVal+=input(i,j,k);
-					result(i,0,k) = tempVal;
-				}					
-			break;
-		case 3:
-			result.resetDimensions(input.mHeight, input.mWidth, 1);
-			for(j=0; j<input.mWidth;j++)
-				for(i=0; i<input.mHeight;i++)
-				{
-					tempVal = 0;
-					for(k=0; k<input.mChannels;k++) tempVal+=input(i,j,k);
-					result(i,j,0) = tempVal;
-				}					
-			break;
-	}
 	return result;
 }
 
@@ -1742,6 +1762,175 @@ const OvImageT<T> max(const OvImageT<T> & input, int dimension = 3)
 				}					
 			break;
 	}
+	return result;
+}
+
+
+/** 
+* @relates OvImageT
+* Sums image pixels along a particular dimension (1 = sum rows, 2 = sum columns, 3 = sum channels)
+* 
+* <p> e.g., 
+* <br> i2 = sum(i1,3); 
+* <br> Here, i2 has the same height and width as i1, but only one color channel (since we have summed all color channels together)
+* <br>
+* <br> i2 = sum(i1,1); 
+* <br> Here, i2 has the same width and channels as i1, but only one row (since we have summed all rows together)
+* </p>
+* @param input the input image
+* @param dimension the dimension to sum along [1 = sum rows, 2 = sum columns, 3 = sum channels(default)]
+* @return summed image
+*/
+template<typename T> 
+const OvImageT<T> sum(const OvImageT<T> & input, int dimension = 3)
+{
+	OvImageT<T> result;
+	int i,j,k;
+	T tempVal;
+
+	if((dimension<1)||(dimension>3)) dimension = 3;
+	switch(dimension)
+	{
+		case 1:
+			result.resetDimensions(1, input.mWidth, input.mChannels);
+			for(k=0; k<input.mChannels;k++)
+				for(j=0; j<input.mWidth;j++)
+				{
+					tempVal = 0;
+					for(i=0; i<input.mHeight;i++) tempVal+=input(i,j,k);
+					result(0,j,k) = tempVal;
+				}					
+			break;
+		case 2:
+			result.resetDimensions(input.mHeight, 1, input.mChannels);
+			for(k=0; k<input.mChannels;k++)
+				for(i=0; i<input.mHeight;i++)
+				{
+					tempVal = 0;
+					for(j=0; j<input.mWidth;j++) tempVal+=input(i,j,k);
+					result(i,0,k) = tempVal;
+				}					
+			break;
+		case 3:
+			result.resetDimensions(input.mHeight, input.mWidth, 1);
+			for(j=0; j<input.mWidth;j++)
+				for(i=0; i<input.mHeight;i++)
+				{
+					tempVal = 0;
+					for(k=0; k<input.mChannels;k++) tempVal+=input(i,j,k);
+					result(i,j,0) = tempVal;
+				}					
+			break;
+	}
+	return result;
+}
+
+/** 
+* @relates OvImageT
+* Sums image pixels in a rectangular region.
+* e.g.,
+* <pre>
+*    i2 = sumRegion(i1,10,20,5,30,0,1); 
+* </pre>
+* @param input the input image
+* @param rowLo starting row (if omitted or set to a negative value, the default value of 0 is used)
+* @param rowHi ending row (if omitted or set to a negative value, the default value used is (height-1) )
+* @param columnLo starting column (if omitted or set to a negative value, the default value of 0 is used)
+* @param columnHi ending column (if omitted or set to a negative value, the default value used is (width-1))
+* @param channelLo starting channel (if omitted or set to a negative value, the default value of 0 is used)
+* @param channelHi ending channel (if omitted or set to a negative value, the default value used is (number of channels-1))
+* @return sum
+*/
+template<typename T>
+T sumRegion(const OvImageT<T> & input, int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1)
+{
+	int i,j,k;
+	T result;
+
+	if(rowLo<0) rowLo = 0; if(rowLo>=input.mHeight) rowLo = input.mHeight-1;
+	if(rowHi<0) rowHi = input.mHeight-1; if(rowHi>=input.mHeight) rowHi = input.mHeight-1;	
+	if(columnLo<0) columnLo = 0; if(columnLo>=input.mWidth) columnLo = input.mWidth-1;
+	if(columnHi<0) columnHi = input.mWidth-1; if(columnHi>=input.mWidth) columnHi = input.mWidth-1;	
+	if(channelLo<0) channelLo = 0; if(channelLo>=input.mChannels) channelLo = input.mChannels-1;
+	if(channelHi<0) channelHi = input.mChannels-1; if(channelHi>=input.mChannels) channelHi = input.mChannels-1;	
+	
+	result = 0;
+
+	for(k=channelLo;k<=channelHi;k++)
+		for(j=columnLo;j<=columnHi;j++)
+			for(i=rowLo;i<=rowHi;i++)
+				result += input(i,j,k);
+	
+	return result;
+}
+
+/** 
+* @relates OvImageT
+* Sums image pixels in a single channel.
+* e.g.,
+* <pre>
+*    i2 = sumSingleChannel(i1,2);  //sums channel 2
+* </pre>
+* @param input the input image
+* @param channel the channel to be summed
+* @return sum
+*/
+template<typename T>
+T sumSingleChannel(const OvImageT<T> & input, int channel)
+{
+	if((channel<0)||(channel>=input.mChannels)) return 0;
+	return sumRegion(input,-1,-1,-1,-1,channel,channel);
+}
+
+/** 
+* @relates OvImageT
+* Sums all image pixels.
+* e.g.,
+* <pre>
+*    i2 = sumAll(i1);  
+* </pre>
+* @return sum
+*/
+template<typename T>
+T sumAll(const OvImageT<T> & input)
+{
+	return sumRegion(input,-1,-1,-1,-1,-1,-1);
+}
+
+/** 
+* @relates OvImageT
+* Find sum of absolute values of all pixels.
+* e.g.,
+* <pre>
+*    temp = L1Norm(i1);  
+* </pre>
+* @param input the input image
+* @return L1 norm
+*/
+template<typename T>
+T L1Norm(const OvImageT<T> & input)
+{
+	T result = 0;
+	for(int i=0; i<input.mSize; i++) result += (T) fabs(input.mData[i]);
+	return result;
+}
+
+/** 
+* @relates OvImageT
+* Find sqrt of sum of squared pixel values.
+* e.g.,
+* <pre>
+*    temp = L2Norm(i1);  
+* </pre>
+* @param input the input image
+* @return L2 norm
+*/
+template<typename T>
+T L2Norm(const OvImageT<T> & input)
+{
+	T result = 0;
+	for(int i=0; i<input.mSize; i++) result += (input.mData[i]*input.mData[i]);
+	result = sqrt(result);
 	return result;
 }
 
@@ -2027,7 +2216,41 @@ const OvImageT<T> resizeBilinear(const OvImageT<T> & input, double scale, bool p
 	return result;
 }
 
+/**
+* Sets image contents to random values ranging from lowerbound to upperbound (inclusive).
+* e.g.,
+* <pre>
+*   i1.setToRandom(10,20);
+* </pre>
+* @param lowerbound lower bound on the desired random numbers
+* @param upperbound upper bound on the desired random numbers
+* @see #random(double lowerbound, double upperbound, int height, int width, int nColorChannels)
+*/
+template<typename T>
+void OvImageT<T>::setToRandom(double lowerbound, double upperbound)
+{
+	for(int i=0; i<mSize; i++) mData[i] = (double) (rand()*(upperbound-lowerbound))/RAND_MAX + lowerbound;
+}
 
+/**
+* Set caller to an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2).
+* e.g.,
+* <pre>
+*   i1.setToMeshgridX(1,5,1,4,2,1); //returns image of height 4, width 3, with each row equal to [1 3 5]
+*      OR using default step sizes
+*   i1.setToMeshgridX(5,8,1,12); 
+* </pre>
+*
+* @param x1 starting x-value 
+* @param x2 ending x-value
+* @param y1 starting y-value
+* @param y2 ending y-value
+* @param dx stepsize along x (if omitted, default = 1)
+* @param dy stepsize along y (if omitted, default = 1)
+* @see setToMeshgridY(T x1, T x2, T y1, T y2, T dx, T dy)
+* @see #meshgridX(double x1, double x2, double y1, double y2, double dx, double dy)
+* @see #meshgridY(double x1, double x2, double y1, double y2, double dx, double dy)
+*/
 template<typename T> 
 void OvImageT<T> ::setToMeshgridX (T x1, T x2, T y1, T y2, T dx, T dy)
 {
@@ -2047,6 +2270,25 @@ void OvImageT<T> ::setToMeshgridX (T x1, T x2, T y1, T y2, T dx, T dy)
 		}
 }
 
+/**
+* Set caller to an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2).
+* e.g.,
+* <pre>
+*   i1.setToMeshgridY(1,5,1,4,2,1); //returns image of height 4, width 3, with each column equal to [1 2 3 4]
+*      OR using default step sizes
+*   i1.setToMeshgridY(5,8,7,12); 
+* </pre>
+*
+* @param x1 starting x-value 
+* @param x2 ending x-value
+* @param y1 starting y-value
+* @param y2 ending y-value
+* @param dx stepsize along x (if omitted, default = 1)
+* @param dy stepsize along y (if omitted, default = 1)
+* @see setToMeshgridX(T x1, T x2, T y1, T y2, T dx, T dy)
+* @see #meshgridX(double x1, double x2, double y1, double y2, double dx, double dy)
+* @see #meshgridY(double x1, double x2, double y1, double y2, double dx, double dy)
+*/
 template<typename T> 
 void OvImageT<T> ::setToMeshgridY (T x1, T x2, T y1, T y2, T dx, T dy)
 {
@@ -2066,6 +2308,20 @@ void OvImageT<T> ::setToMeshgridY (T x1, T x2, T y1, T y2, T dx, T dy)
 		}
 }
 
+/**
+* Sets the image to gaussian of half-width sigma and height and width equal to size.
+* e.g.,
+* <pre>
+*    i1.setToGaussian(10,3);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian
+* @see gaussian(int size, double sigma)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborY(int size, double sigma, double period, double phaseshift)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+*/
 template<typename T> 
 void OvImageT<T> ::setToGaussian(int size, double sigma)
 {
@@ -2082,9 +2338,25 @@ void OvImageT<T> ::setToGaussian(int size, double sigma)
 			y = i-halfsize;
 			(*this)(i,j) = (T) exp(-0.5*(x*x+y*y)/(sigma*sigma));
 		}	
-	(*this) /= this->L1Norm();
+	(*this) /= L1Norm(*this);
 }
 
+/**
+* Sets the image to a horizontal gabor filter.
+* e.g.,
+* <pre>
+*    i1.setToGaborX(10,3,3,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborY(int size, double sigma, double period, double phaseshift)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+* @see gaussian(int size, double sigma)
+*/
 template<typename T> 
 void OvImageT<T> ::setToGaborX(int size, double sigma, double period, double phaseshift=0)
 {
@@ -2118,6 +2390,22 @@ void OvImageT<T> ::setToGaborX(int size, double sigma, double period, double pha
 	(*this) /= (T) normalizer;
 }
 
+/**
+* Sets the image to a vertical gabor filter.
+* e.g.,
+* <pre>
+*    i1.setToGaborY(10,3,3,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+* @see gaussian(int size, double sigma)
+*/
 template<typename T> 
 void OvImageT<T> ::setToGaborY(int size, double sigma, double period, double phaseshift=0)
 {
@@ -2149,6 +2437,150 @@ void OvImageT<T> ::setToGaborY(int size, double sigma, double period, double pha
 		}	
 
 	(*this) /= (T) normalizer;
+}
+
+/** Creates an image filled with random numbers ranging from lowerbound to upperbound.
+* <br>e.g., 
+* <pre> 
+*    i1 = random(20,30,3,3,1);
+* </pre>
+*
+* @param lowerbound lower bound on the desired random numbers
+* @param upperbound upper bound on the desired random numbers
+* @param height	desired height of the image
+* @param width desired width of image
+* @param nColorChannels desired number of color channels
+* @return a new image of type OvImageT<double>
+* @see OvImageT<T>#setToRandom(double lowerbound, double upperbound)
+*/
+const OvImageT<double> random(double lowerbound, double upperbound, int height, int width, int nColorChannels = 1)
+{
+	OvImageT<double> result(height,width,nColorChannels);
+	result.setToRandom(lowerbound, upperbound);
+	return result;
+}
+
+/**
+* Creates an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2).
+* e.g.,
+* <pre>
+*   i1 = meshgridX(1,5,1,4,2,1); //returns image of height 4, width 3, with each row equal to [1 3 5]
+*      OR using default step sizes
+*   i1 = meshgridX(5,8,1,12); 
+* </pre>
+*
+* @param x1 starting x-value 
+* @param x2 ending x-value
+* @param y1 starting y-value
+* @param y2 ending y-value
+* @param dx stepsize along x (if omitted, default = 1)
+* @param dy stepsize along y (if omitted, default = 1)
+* @return an image of type OvImageT<double>
+* @see #meshgridY(double x1, double x2, double y1, double y2, double dx, double dy)
+* @see OvImageT<T>#setToMeshgridX(T x1, T x2, T y1, T y2, T dx, T dy)
+* @see OvImageT<T>#setToMeshgridY(T x1, T x2, T y1, T y2, T dx, T dy)
+*/
+const OvImageT<double> meshgridX (double x1, double x2, double y1, double y2, double dx = 1, double dy = 1)
+{
+	OvImageT<double> result;
+	result.setToMeshgridX(x1, x2, y1, y2, dx, dy);
+	return result;
+}
+
+/**
+* Creates an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its y-coordinate (from y1 to y2).
+* e.g.,
+* <pre>
+*   i1 = meshgridY(1,5,1,4,2,1); //returns image of height 4, width 3, with each column equal to [1 2 3 4]
+*      OR using default step sizes
+*   i1 = meshgridY(5,8,1,12); 
+* </pre>
+*
+* @param x1 starting x-value 
+* @param x2 ending x-value
+* @param y1 starting y-value
+* @param y2 ending y-value
+* @param dx stepsize along x (if omitted, default = 1)
+* @param dy stepsize along y (if omitted, default = 1)
+* @return an image of type OvImageT<double>
+* @see #meshgridX(double x1, double x2, double y1, double y2, double dx, double dy)
+* @see OvImageT<T>#setToMeshgridY(T x1, T x2, T y1, T y2, T dx, T dy)
+* @see OvImageT<T>#setToMeshgridX(T x1, T x2, T y1, T y2, T dx, T dy)
+*/
+const OvImageT<double> meshgridY (double x1, double x2, double y1, double y2, double dx = 1, double dy = 1)
+{
+	OvImageT<double> result;
+	result.setToMeshgridY(x1, x2, y1, y2, dx, dy);
+	return result;
+}
+
+/**
+* Creates image equal to gaussian of half-width sigma and height and width equal to size.
+* e.g.,
+* <pre>
+*    i1 = gaussian(10,3);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian
+* @return an image of type OvImageT<double>
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborY(int size, double sigma, double period, double phaseshift)
+*/
+const OvImageT<double> gaussian(int size, double sigma)
+{
+	OvImageT<double> result;
+	result.setToGaussian(size, sigma);
+	return result;
+}
+
+/**
+* Sets the image to a horizontal gabor filter.
+* e.g.,
+* <pre>
+*    i1 = gaborX(10,3,3,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborY(int size, double sigma, double period, double phaseshift)
+* @see #gaussian(int size, double sigma)
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+*/
+const OvImageT<double> gaborX(int size, double sigma, double period, double phaseshift)
+{
+	OvImageT<double> result;
+	result.setToGaborX(size, sigma, period, phaseshift);
+	return result;
+}
+
+/**
+* Sets the image to a vertical gabor filter.
+* e.g.,
+* <pre>
+*    i1 = gaborY(10,3,3,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @return an image of type OvImageT<double>
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborY(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaussian(int size, double sigma)
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+*/
+const OvImageT<double> gaborY(int size, double sigma, double period, double phaseshift)
+{
+	OvImageT<double> result;
+	result.setToGaborY(size, sigma, period, phaseshift);
+	return result;
 }
 
 #endif //__OVIMAGET_CPP

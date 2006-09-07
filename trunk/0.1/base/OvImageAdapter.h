@@ -26,17 +26,17 @@ public:
 	* @see mDataType
 	*/
 	enum OvDataType {
-		OV_DATA_UNKNOWN, 
-		OV_DATA_UINT8, 
-		OV_DATA_INT8, 
-		OV_DATA_UINT16, 
-		OV_DATA_INT16, 
-		OV_DATA_UINT32, 
-		OV_DATA_INT32, 
-		OV_DATA_UINT64, 
-		OV_DATA_INT64, 
-		OV_DATA_FLOAT32, 
-		OV_DATA_DOUBLE64
+		OV_DATA_UNKNOWN, /**< unknown */
+		OV_DATA_UINT8,   /**< unsigned char */
+		OV_DATA_INT8,	 /**< char */
+		OV_DATA_UINT16,  /**< short */
+		OV_DATA_INT16,   /**< unsigned short */
+		OV_DATA_UINT32,  /**< int */
+		OV_DATA_INT32,   /**< unsigned int */
+		OV_DATA_UINT64,  /**< unsigned long long */
+		OV_DATA_INT64,   /**< long long */
+		OV_DATA_FLOAT32, /**< float */
+		OV_DATA_DOUBLE64 /**< double */
 	};
 
 	/**
