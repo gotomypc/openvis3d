@@ -46,6 +46,7 @@ public:
 	bool copyMasked(const OvImageT<bool> & mask, const T & value); //set pixels = value only where mask is set to true
 	//bool copyRegion(const T & value, int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1);
 	//bool copyRegionEx(const T & value, int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1);	
+
 	const OvImageT<T> getSubImage(int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1); //copy and return rectangular image block
 	
 	//arithmetic operators 
