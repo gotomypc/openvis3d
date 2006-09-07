@@ -29,25 +29,11 @@ public:
 	void resetDimensions(int height, int width, int nColorChannels = 1); //reset image dimensions and fill with zeros
 	void reshape(int height, int width, int nColorChannels = 1);  //reshape image without changing number of pixels
 
-	//methods to create specific images and kernels
-	void setToRandom(double multiplier = 1.0); //fill with random numbers
-	void setToMeshgridX (T x1, T x2, T y1, T y2, T dx = 1, T dy = 1); //create image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2)
-	void setToMeshgridY (T x1, T x2, T y1, T y2, T dx = 1, T dy = 1); //create image of height y2-y1+1 and width x2-x1+1 with each pixel set to its y-coordinate (from y1 to y2)
-	void setToGaussian(int size, double sigma);	 //create a gaussian
-	void setToGaborX(int size, double sigma, double period, double phaseshift);	//create a gabor filter oriented horizontally
-	void setToGaborY(int size, double sigma, double period, double phaseshift);	//create a gabor filter oriented vertically
-
-	T sumRegion(int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1); //sum pixels in a rectangular image region
-	T sumSingleChannel(int channel); //sum all pixels in a single color channel
-	T sumAll(void); //sum all image pixels
-	T L1Norm(void); //sum of absolute values of all pixels
-	T L2Norm(void); //sqrt of sum of squared pixel values
-
 	//for debugging
-	void print(void); //print image contents (only for debugging)
+	void print(void); /**< print image contents (only for debugging) */
 
 	//special operators	
-	inline T& operator() (int row, int column = 0, int channel = 0); //allows easy indexing into the image (e.g., im(i,j,k)
+	inline T& operator() (int row, int column = 0, int channel = 0); //allows easy indexing into the image, e.g., im(i,j,k)
 	inline T& operator() (int row, int column = 0, int channel = 0) const; //const version of above operator
 	OvImageT<T>& operator = (const OvImageT<T> & rhsImage); //assignment operator (e.g., i1 = i2; )
 	OvImageT<T>& operator = (const T & rhs); //assignment operator with scalar rhs (e.g., i1 = 5.2; )
@@ -147,11 +133,16 @@ public:
 	template<typename C> friend const OvImageT<C> minFilter2D (const OvImageT<C> & input, int filterHeight, int filterWidth);	 //minimum filter
 	template<typename C> friend const OvImageT<C> maxFilter2D (const OvImageT<C> & input, int filterHeight, int filterWidth);	 //maximum filter
 	template<typename C> friend const OvImageT<C> meanFilter2D (const OvImageT<C> & input, int filterHeight, int filterWidth);	 //mean filter
-	
-	template<typename C> friend const OvImageT<C> sum(const OvImageT<C> & input, int dimension);	//sum along a certain dimension (1,2,3 = height, width, or color respectively), e.g., i1 = sum(i2,3); returns image with same height and width but 1 color channel
+
 	template<typename C> friend const OvImageT<C> min(const OvImageT<C> & input, int dimension);	//min along a certain dimension (1,2,3 = height, width, or color respectively), e.g., i1 = min(i2,3); returns image with same height and width but 1 color channel
 	template<typename C> friend const OvImageT<C> max(const OvImageT<C> & input, int dimension);	//max along a certain dimension (1,2,3 = height, width, or color respectively), e.g., i1 = max(i2,3); returns image with same height and width but 1 color channel
 	template<typename C> friend const OvImageT<C> mean(const OvImageT<C> & input, int dimension);	//mean along a certain dimension (1,2,3 = height, width, or color respectively), e.g., i1 = mean(i2,3); returns image with same height and width but 1 color channel
+	template<typename C> friend const OvImageT<C> sum(const OvImageT<C> & input, int dimension);	//sum along a certain dimension (1,2,3 = height, width, or color respectively), e.g., i1 = sum(i2,3); returns image with same height and width but 1 color channel
+	template<typename C> friend C sumRegion(const OvImageT<C> & input, int rowLo, int rowHi, int columnLo, int columnHi, int channelLo, int channelHi); //sum pixels in a rectangular image region
+	template<typename C> friend C sumSingleChannel(const OvImageT<C> & input, int channel); //sum all pixels in a single color channel
+	template<typename C> friend C sumAll(const OvImageT<C> & input); //sum all image pixels
+	template<typename C> friend C L1Norm(const OvImageT<C> & input); //sum of absolute values of all pixels
+	template<typename C> friend C L2Norm(const OvImageT<C> & input); //sqrt of sum of squared pixel values
 
 	template<typename C> friend const OvImageT<C> transpose(const OvImageT<C> & input); //transpose image (each color channel independently)
 	template<typename C> friend const OvImageT<C> flipLR(const OvImageT<C> & input); //flip image left to right (i.e., about vertical axis)
@@ -163,6 +154,25 @@ public:
 
 	template<typename C> friend const OvImageT<C> resizeNearestNbr(const OvImageT<C> & input, double scale, bool preSmooth);	//rescale image using nearest neighbor method; use preSmooth to enable resampling
 	template<typename C> friend const OvImageT<C> resizeBilinear(const OvImageT<C> & input, double scale, bool preSmooth);		//rescale image using bilinear interpolation method; use preSmooth to enable resampling
+
+	//methods to create specific images and kernels	and their standalone friend versions
+	void setToRandom(double lowerbound, double upperbound); //fill caller with random numbers
+	friend const OvImageT<double> random(double lowerbound, double upperbound, int height, int width, int nColorChannels); //create new image filled with random numbers
+
+	void setToMeshgridX (T x1, T x2, T y1, T y2, T dx = 1, T dy = 1); //set caller to an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2)
+	friend const OvImageT<double> meshgridX (double x1, double x2, double y1, double y2, double dx, double dy); //create new image of height y2-y1+1 and width x2-x1+1 with each pixel set to its x-coordinate (from x1 to x2)
+
+	void setToMeshgridY (T x1, T x2, T y1, T y2, T dx = 1, T dy = 1); //set caller to an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its y-coordinate (from y1 to y2)
+	friend const OvImageT<double> meshgridY (double x1, double x2, double y1, double y2, double dx, double dy); //create new image of height y2-y1+1 and width x2-x1+1 with each pixel set to its y-coordinate (from y1 to y2)
+
+	void setToGaussian(int size, double sigma);	 //set caller to a gaussian
+	friend const OvImageT<double> gaussian(int size, double sigma);	 //create a new gaussian
+
+	void setToGaborX(int size, double sigma, double period, double phaseshift);	//set caller to a gabor filter oriented horizontally
+	friend const OvImageT<double> gaborX(int size, double sigma, double period, double phaseshift);	//create a gabor filter oriented horizontally
+
+	void setToGaborY(int size, double sigma, double period, double phaseshift);	//set caller to a gabor filter oriented vertically
+	friend const OvImageT<double> gaborY(int size, double sigma, double period, double phaseshift);	//create a gabor filter oriented vertically
 
 	//desired functionality:
 	//imtransform (for general transformation matrix)
