@@ -525,6 +525,30 @@ bool OvImageT<T>::copyMasked(const OvImageT<bool> & mask, const T & value)
 }
 
 /**
+* Copies a certain input channel to a certain output channel.
+* Note: the input should have the same height and width as the caller.
+* @param input the input image
+* @param inputChannel the channel of the input to be copied
+* @param outputChannel the destination channel of the output
+* @return true if successful
+*/
+//
+template<typename T>
+bool OvImageT<T>::copyChannel(OvImageT<T> & input, int inputChannel, int outputChannel)
+{
+	if((mHeight!=input.mHeight)||(mWidth!=input.mWidth)) return false;		
+	if((input.mChannels>=inputChannel)||(inputChannel<0)) return false;		
+	if((mChannels>=outputChannel)||(outputChannel<0)) return false;		
+
+	for(int j=0; j<mWidth; j++)
+		for(int i=0; i<mHeight; i++)
+			(*this)(i,j,outputChannel) = (T) (input(i,j,inputChannel));
+
+	return true;
+}
+
+
+/**
 * Copies and returns a rectangular sub-block of the image.
 * e.g.,
 * <pre>
@@ -2038,6 +2062,19 @@ const OvImageT<T> rgb2gray(const OvImageT<T> & input)
 	return result;	
 }
 
+
+/** 
+* Converts multi-channel color image to single-channel gray image by averaging channels.
+* <p> e.g., 
+* <br> i1.setToGray(); 
+* </p>
+*/
+template<typename T>
+void OvImageT<T>::setToGray()
+{
+	(*this) = rgb2gray(*this);
+}
+
 /** 
 * @relates OvImageT
 * Tiles input image <b>height</b> times along rows, <b>width</b> times along columns and <b>channels</b> times along color channels.
@@ -2582,5 +2619,133 @@ const OvImageT<double> gaborY(int size, double sigma, double period, double phas
 	result.setToGaborY(size, sigma, period, phaseshift);
 	return result;
 }
+
+
+/**
+* Sets the image to a gabor filter with arbitrary orientation
+* e.g. (to use a filter with 45 degree orientation),
+* <pre>
+*    i1.setToGaborOriented(10,3,3,45,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param angle the orientation of the sinusoid (degrees)
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @see #gaborOriented(int size, double sigma, double period, double angle, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+*/
+template<typename T> 
+void OvImageT<T>::setToGaborOriented(int size, double sigma, double period, double angle, double phaseshift=0)
+{
+	double x,y;
+	double halfsize, tempVal, normalizer;
+	double pi = 2 * acos(0.0);
+
+	if(size<=0) return;
+	if(sigma<=0) return;
+	if(period<=0) return;
+
+	phaseshift = phaseshift*pi/180; //convert phaseshift from degrees to radians
+	angle      = angle*pi/180;		//convert orientation from degrees to radians
+	
+	this->resetDimensions(size, size, 1); 
+	halfsize = (size-1)/2.0;	
+
+	normalizer = 0;
+	for(int j=0; j<mWidth; j++)
+		for(int i=0; i<mHeight; i++)
+		{
+			x = j-halfsize;
+			y = i-halfsize;
+		
+			tempVal = exp(-0.5*(x*x+y*y)/(sigma*sigma)); //gaussian envelope
+			normalizer += tempVal; //normalise using gaussian envelope only
+			
+			//now multiply by sinusoid to get gabor function
+			(*this)(i,j) = (T) (tempVal*sin(2.0*pi*(x*cos(angle)+y*sin(angle))/period + phaseshift));
+		}	
+
+	(*this) /= (T) normalizer;
+}
+
+/**
+* Creates a gabor filter with arbitrary orientation
+* e.g. (to use a filter with 45 degree orientation),
+* <pre>
+*    i1 = gaborOriented(10,3,3,45,0);
+* </pre>
+* @param size height and width are both set equal to size
+* @param sigma halfwidth of the gaussian envelope
+* @param period the period of the sinusoid
+* @param angle the orientation of the sinusoid (degrees)
+* @param phaseshift (the phase of the sinusoid in degrees (default is 0)).
+* @see OvImageT<T>#setGaborOriented(int size, double sigma, double period, double angle, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+*/
+const OvImageT<double> gaborOriented(int size, double sigma, double period, double angle, double phaseshift=0)
+{
+	OvImageT<double> result;
+	result.setToGaborOriented(size, sigma, period, angle, phaseshift);
+	return result;
+}
+
+/**
+* Run Gabor filters with 4 orientation and 4 scales, and return the phases
+* at each filter stacked as a 16 channel image.
+* <pre>
+*    phases = i1.getGaborPhaseStack();
+* </pre>
+* @return an image with 16 channels with each channel containing the convolution with a gabor filter of certain orientation and scale.
+* @see OvImageT<T>#setGaborOriented(int size, double sigma, double period, double angle, double phaseshift)
+* @see #gaborOriented(int size, double sigma, double period, double angle, double phaseshift)
+* @see OvImageT<T>#setToGaborX(int size, double sigma, double period, double phaseshift)
+* @see #gaborX(int size, double sigma, double period, double phaseshift)
+* @see OvImageT<T>#setToGaussian(int size, double sigma)
+* @see #gaborY(int size, double sigma, double period, double phaseshift)
+* @see gaussian(int size, double sigma)
+*/
+template<typename T> 
+OvImageT<double> OvImageT<T>::getGaborPhaseStack()
+{
+  using namespace std;
+
+  OvImageT<double> copyOfThis(*this,true);
+  OvImageT<double> resultA;
+  OvImageT<double> resultB;
+  OvImageT<double> phase;
+
+  OvImageT<double> filterA;
+  OvImageT<double> filterB;
+
+  OvImageT<double> result = OvImageT(mHeight, mWidth, 16);
+
+  int n = 0;
+  for(double period=4; period<= 32; period*=2)
+    for(double angle=0; angle<180; angle += 45){
+      filterA.setToGaborOriented(31,2*period,period,angle,0);
+      filterB.setToGaborOriented(31,2*period,period,angle,90);
+
+      resultA = convolve2D(filterA,copyOfThis);
+      resultB = convolve2D(filterB,copyOfThis);
+
+      phase = atan2(resultA, resultB);
+      
+	  result.copyChannel(phase,0,n);
+      
+      n++;
+    }
+
+  
+  return result;
+}
+
+
 
 #endif //__OVIMAGET_CPP

@@ -44,6 +44,7 @@ public:
 	bool copyToAdapter(OvImageAdapter & iadapter); //export values to OvImageAdapter if it has same dimensions
 	bool copyMasked(const OvImageT<bool> & mask, const OvImageT<T> & srcImage); //copy values from srcImage only for pixels where mask is set to true
 	bool copyMasked(const OvImageT<bool> & mask, const T & value); //set pixels = value only where mask is set to true
+    bool copyChannel(OvImageT<T> & input, int inputchannel, int outputchannel); //copies a certain input channel to a certain output channel
 	//bool copyRegion(const T & value, int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1);
 	//bool copyRegionEx(const T & value, int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1);	
 
@@ -148,7 +149,6 @@ public:
 	template<typename C> friend const OvImageT<C> transpose(const OvImageT<C> & input); //transpose image (each color channel independently)
 	template<typename C> friend const OvImageT<C> flipLR(const OvImageT<C> & input); //flip image left to right (i.e., about vertical axis)
 	template<typename C> friend const OvImageT<C> flipUD(const OvImageT<C> & input); //flip image upside-down (i.e., about horizontal axis)
-	template<typename C> friend const OvImageT<C> rgb2gray(const OvImageT<C> & input);	 //convert color image (multiple channels) to gray image (single channel)
 
 	template<typename C> friend const OvImageT<C> repmat (const OvImageT<C> & input, int height, int width, int channels); //tile input image 'height' times vertically, 'width' times horizontally, and 'channels' times along color channels
 	template<typename C> friend const OvImageT<C> shiftImageXY (const OvImageT<C> & input, int rows, int columns); //return copy of input image translated by (rows, columns)
@@ -174,6 +174,15 @@ public:
 
 	void setToGaborY(int size, double sigma, double period, double phaseshift);	//set caller to a gabor filter oriented vertically
 	friend const OvImageT<double> gaborY(int size, double sigma, double period, double phaseshift);	//create a gabor filter oriented vertically
+
+	void setToGaborOriented(int size, double sigma, double period, double angle, double phaseshift); //set caller to a gabor filter with a user-specified orientation
+	friend const OvImageT<double> gaborOriented(int size, double sigma, double period, double angle, double phaseshift);	//create a gabor filter with a user-specified orientation
+
+	OvImageT<double> getGaborPhaseStack();
+
+	void setToGray();	//convert caller to gray image (single channel)
+	template<typename C> friend const OvImageT<C> rgb2gray(const OvImageT<C> & input);	 //convert color image (multiple channels) to gray image (single channel)
+
 
 	//desired functionality:
 	//imtransform (for general transformation matrix)

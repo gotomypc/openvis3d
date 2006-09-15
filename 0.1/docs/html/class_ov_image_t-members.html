@@ -9,6 +9,7 @@
   <ul>
     <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
     <li id="current"><a href="annotated.html"><span>Classes</span></a></li>
+    <li><a href="files.html"><span>Files</span></a></li>
   </ul></div>
 <div class="tabs">
   <ul>
@@ -24,6 +25,7 @@
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#31530b4fe5ab6b329311b7bc4bab3040">atan2</a>(const OvImageT&lt; C &gt; &amp;iy, const OvImageT&lt; C &gt; &amp;ix)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#5689068f3a369efbb1f55f32427e7fd4">ceil</a>(const OvImageT&lt; C &gt; &amp;i1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#da5cd97ac3797ce0d91d56fc012fc561">convolve2D</a>(const OvImageT&lt; T &gt; &amp;kernel, const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#7d7b8efd9282ba8fa3faf602161607f3">copyChannel</a>(OvImageT&lt; T &gt; &amp;input, int inputchannel, int outputchannel)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#17e95855342303a04a10aa53280f171b">copyFromAdapter</a>(OvImageAdapter &amp;iadapter)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#d6d414903560b23864fe002c7b78f30e">copyMasked</a>(const OvImageT&lt; bool &gt; &amp;mask, const OvImageT&lt; T &gt; &amp;srcImage)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#b552fe59aaae4cf3de849b1f79807607">copyMasked</a>(const OvImageT&lt; bool &gt; &amp;mask, const T &amp;value)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
@@ -35,10 +37,12 @@
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#a66b882a6fb44e14b5219d8f69ee6da3">flipLR</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#c553ed3199a213bc1bd352515d65cc37">flipUD</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#c3785ece37c4d268df0e00af3699fd6d">floor</a>(const OvImageT&lt; C &gt; &amp;i1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#54b9933ff8471eced117ee266e982572">gaborOriented</a>(int size, double sigma, double period, double angle, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX</a>(int size, double sigma, double period, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY</a>(int size, double sigma, double period, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#8eb7c228a730367219981bc674c1e923">gaussian</a>(int size, double sigma)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#b1e8e17cc9278e3364856dd5622f52ca">getDimensions</a>(int &amp;height, int &amp;width, int &amp;nColorChannels) const </td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#a3fc027a96b53e814e963e8249eb734c">getGaborPhaseStack</a>()</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#c06f89b78c7441b78d8e53b9f36593fc">getSubImage</a>(int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#01681927c18f2e4e095adeeefdc686a3">L1Norm</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#8afe94821e1e122ea04d8dbc3efd8626">L2Norm</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
@@ -123,9 +127,11 @@
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#6b97e124d1a8494262fd1756b7fe7b15">resizeNearestNbr</a>(const OvImageT&lt; T &gt; &amp;input, double scale, bool preSmooth=false)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#4e18b8ef340c63190e0129b5b6f64f83">rgb2gray</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#aabda9bc986987365e55a153b0533522">round</a>(const OvImageT&lt; C &gt; &amp;i1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#e5f9f799084d2ec1d40aeaa02f160366">setToGaborOriented</a>(int size, double sigma, double period, double angle, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">setToGaborX</a>(int size, double sigma, double period, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#9e8f2a6bb68757efd31cebf86662f604">setToGaborY</a>(int size, double sigma, double period, double phaseshift)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#7b5d3bbb55847426be6c7c5943e15742">setToGaussian</a>(int size, double sigma)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#3e7bd9f887cdddb630a230a5609f9b58">setToGray</a>()</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#bbaaa1a68fb1bc6c98b1aa4f2fb905dc">setToMeshgridX</a>(T x1, T x2, T y1, T y2, T dx=1, T dy=1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#3c23538c6ce076fd03a81c85250c9828">setToMeshgridY</a>(T x1, T x2, T y1, T y2, T dx=1, T dy=1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#023f12997c74e33609de5279713b4109">setToRandom</a>(double lowerbound, double upperbound)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td></td></tr>
@@ -141,7 +147,7 @@
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#8d5be3f9d83be30f76499f6b7193b7c9">tanh</a>(const OvImageT&lt; C &gt; &amp;i1)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#c8d465654952037b535dd32a9b6ce8b0">transpose</a>(const OvImageT&lt; T &gt; &amp;input)</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [related]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="class_ov_image_t.html#f27d684639d514394c41b33c65aa032a">~OvImageT</a>()</td><td><a class="el" href="class_ov_image_t.html">OvImageT&lt; T &gt;</a></td><td><code> [virtual]</code></td></tr>
-</table><hr size="1"><address style="align: right;"><small>Generated on Thu Sep 7 18:09:21 2006 for OpenVis3D by&nbsp;
+</table><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 15 14:58:11 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>
