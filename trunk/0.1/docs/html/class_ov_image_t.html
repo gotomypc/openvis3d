@@ -9,6 +9,7 @@
   <ul>
     <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
     <li id="current"><a href="annotated.html"><span>Classes</span></a></li>
+    <li><a href="files.html"><span>Files</span></a></li>
   </ul></div>
 <div class="tabs">
   <ul>
@@ -60,6 +61,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#b552fe59aaae4cf3de849b1f79807607">copyMasked</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; bool &gt; &amp;mask, const T &amp;value)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#7d7b8efd9282ba8fa3faf602161607f3">copyChannel</a> (<a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;input, int inputchannel, int outputchannel)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#c06f89b78c7441b78d8e53b9f36593fc">getSubImage</a> (int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#5235ae2f5e517352838dc8a3282d84a5">operator+=</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;rhs)</td></tr>
@@ -103,6 +106,12 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">setToGaborX</a> (int size, double sigma, double period, double phaseshift)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#9e8f2a6bb68757efd31cebf86662f604">setToGaborY</a> (int size, double sigma, double period, double phaseshift)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#e5f9f799084d2ec1d40aeaa02f160366">setToGaborOriented</a> (int size, double sigma, double period, double angle, double phaseshift)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; double &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#a3fc027a96b53e814e963e8249eb734c">getGaborPhaseStack</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#3e7bd9f887cdddb630a230a5609f9b58">setToGray</a> ()</td></tr>
 
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#be45b277aa7426eb014345fcdc4bb3af">mHeight</a></td></tr>
@@ -277,6 +286,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; double &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX</a> (int size, double sigma, double period, double phaseshift)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; double &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY</a> (int size, double sigma, double period, double phaseshift)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; double &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#54b9933ff8471eced117ee266e982572">gaborOriented</a> (int size, double sigma, double period, double angle, double phaseshift)</td></tr>
 
 <tr><td colspan="2"><br><h2>Related Functions</h2></td></tr>
 <tr><td colspan="2">(Note that these are not member functions.) <br><br></td></tr>
@@ -484,7 +495,7 @@ template&lt;typename C&gt; </div>
 Copy constructor to copy between two different image template types T and C. <p>
 e.g., <pre>
    OvImageT&lt;int&gt; i1(2,3,1);
-   OvImageT&lt;float&gt; i2(i1);
+   <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i2(i1);
  </pre><p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -520,6 +531,51 @@ Destructor of <a class="el" href="class_ov_image_t.html">OvImageT</a>.
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="7d7b8efd9282ba8fa3faf602161607f3"></a><!-- doxytag: member="OvImageT::copyChannel" ref="7d7b8efd9282ba8fa3faf602161607f3" args="(OvImageT&lt; T &gt; &amp;input, int inputchannel, int outputchannel)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::copyChannel           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>inputChannel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>outputChannel</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Copies a certain input channel to a certain output channel. Note: the input should have the same height and width as the caller. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>input</em>&nbsp;</td><td>the input image </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>inputChannel</em>&nbsp;</td><td>the channel of the input to be copied </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>outputChannel</em>&nbsp;</td><td>the destination channel of the output </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>true if successful </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="17e95855342303a04a10aa53280f171b"></a><!-- doxytag: member="OvImageT::copyFromAdapter" ref="17e95855342303a04a10aa53280f171b" args="(OvImageAdapter &amp;iadapter)" -->
 <div class="memitem">
 <div class="memproto">
@@ -549,7 +605,7 @@ Imports image from an <a class="el" href="class_ov_image_adapter.html">OvImageAd
  e.g., import and export using OpenCVAdapter, a class derived from <a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a>. <pre>
     IplImage*img = cvLoadImage("test.jpg");
     OpenCVImageAdapter*opencvAdaptor = new OpenCVImageAdapter(img);
-    OvImageT&lt;float&gt; i1;
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1;
     i1.copyFromAdapter(*opencvAdaptor); //Now the opencv image is copied to i1
     i1 = i1/2;	//divide all pixel values by 2
     i1.copyToAdapter(*opencvAdaptor); //copy back to opencv image
@@ -662,7 +718,7 @@ Exports image to an <a class="el" href="class_ov_image_adapter.html">OvImageAdap
  e.g., import and export using OpenCVAdapter, a class derived from <a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a>. <pre>
     IplImage*img = cvLoadImage("test.jpg");
     OpenCVImageAdapter*opencvAdaptor = new OpenCVImageAdapter(img);
-    OvImageT&lt;float&gt; i1;
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1;
     i1.copyFromAdapter(*opencvAdaptor); //Now the opencv image is copied to i1
     i1 = i1/2;	//divide all pixel values by 2
     i1.copyToAdapter(*opencvAdaptor); //copy back to opencv image
@@ -711,6 +767,37 @@ Returns the dimensions of the image. <dl compact><dt><b>Parameters:</b></dt><dd>
     <tr><td valign="top"></td><td valign="top"><em>nColorChannels</em>&nbsp;</td><td>returns number of channels </td></tr>
   </table>
 </dl>
+
+</div>
+</div><p>
+<a class="anchor" name="a3fc027a96b53e814e963e8249eb734c"></a><!-- doxytag: member="OvImageT::getGaborPhaseStack" ref="a3fc027a96b53e814e963e8249eb734c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; double &gt; <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::getGaborPhaseStack           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Run Gabor filters with 4 orientation and 4 scales, and return the phases at each filter stacked as a 16 channel image. <pre>
+    phases = i1.getGaborPhaseStack();
+ </pre> <dl compact><dt><b>Returns:</b></dt><dd>an image with 16 channels with each channel containing the convolution with a gabor filter of certain orientation and scale. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd>OvImageT&lt;T&gt;::setGaborOriented(int size, double sigma, double period, double angle, double phaseshift) <p>
+<a class="el" href="class_ov_image_t.html#54b9933ff8471eced117ee266e982572">gaborOriented(int size, double sigma, double period, double angle, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#7b5d3bbb55847426be6c7c5943e15742">OvImageT&lt;T&gt;::setToGaussian(int size, double sigma)</a> <p>
+<a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#8eb7c228a730367219981bc674c1e923">gaussian(int size, double sigma)</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1178,7 +1265,7 @@ template&lt;typename C&gt; </div>
 
 <p>
 Assignment operator to copy one image to another of a different data type. e.g., <pre>
-    OvImageT&lt;float&gt; i1(4,4,1);
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1(4,4,1);
     OvImageT&lt;int&gt; i2;
     i2 = i1;
  </pre> 
@@ -1204,7 +1291,7 @@ template&lt;typename T&gt; </div>
 
 <p>
 Assignment operator to set all values of an image to a given scalar. e.g., <pre>
-    OvImageT&lt;float&gt; i1(4,4,1);
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1(4,4,1);
     i1 = 4.2;
  </pre> 
 </div>
@@ -1229,8 +1316,8 @@ template&lt;typename T&gt; </div>
 
 <p>
 Assignment operator to copy one image to another of the same data type. e.g., <pre>
-    OvImageT&lt;float&gt; i1(4,4,1);
-    OvImageT&lt;float&gt; i2;
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1(4,4,1);
+    <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i2;
     i2 = i1;
  </pre> 
 </div>
@@ -1340,7 +1427,7 @@ template&lt;typename T&gt; </div>
 Reshapes the image without changing total size or pixel values. Alters the height, width and channels only if their product is equal to the product of the existing values. <br>
  i.e., only if height*width*channels = (old height)*(old width)*(old channels) <br>
  e.g, <pre>
-   OvImageT&lt;float&gt; i1(2,8,1);
+   <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> i1(2,8,1);
    i1.reshape(4,4,1);
  </pre> <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1349,6 +1436,71 @@ Reshapes the image without changing total size or pixel values. Alters the heigh
     <tr><td valign="top"></td><td valign="top"><em>nColorChannels</em>&nbsp;</td><td>number of channels </td></tr>
   </table>
 </dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e5f9f799084d2ec1d40aeaa02f160366"></a><!-- doxytag: member="OvImageT::setToGaborOriented" ref="e5f9f799084d2ec1d40aeaa02f160366" args="(int size, double sigma, double period, double angle, double phaseshift)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::setToGaborOriented           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>sigma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>period</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>phaseshift</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the image to a gabor filter with arbitrary orientation e.g. (to use a filter with 45 degree orientation), <pre>
+    i1.setToGaborOriented(10,3,3,45,0);
+ </pre> <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>height and width are both set equal to size </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>sigma</em>&nbsp;</td><td>halfwidth of the gaussian envelope </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>period</em>&nbsp;</td><td>the period of the sinusoid </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>the orientation of the sinusoid (degrees) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>phaseshift</em>&nbsp;</td><td>(the phase of the sinusoid in degrees (default is 0)). </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#54b9933ff8471eced117ee266e982572">gaborOriented(int size, double sigma, double period, double angle, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY(int size, double sigma, double period, double phaseshift)</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1510,6 +1662,29 @@ Sets the image to gaussian of half-width sigma and height and width equal to siz
 <a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
 <a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY(int size, double sigma, double period, double phaseshift)</a> </dd></dl>
 
+</div>
+</div><p>
+<a class="anchor" name="3e7bd9f887cdddb630a230a5609f9b58"></a><!-- doxytag: member="OvImageT::setToGray" ref="3e7bd9f887cdddb630a230a5609f9b58" args="()" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::setToGray           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Converts multi-channel color image to single-channel gray image by averaging channels. <p>
+e.g., <br>
+ i1.setToGray();  
 </div>
 </div><p>
 <a class="anchor" name="bbaaa1a68fb1bc6c98b1aa4f2fb905dc"></a><!-- doxytag: member="OvImageT::setToMeshgridX" ref="bbaaa1a68fb1bc6c98b1aa4f2fb905dc" args="(T x1, T x2, T y1, T y2, T dx=1, T dy=1)" -->
@@ -1882,7 +2057,7 @@ template&lt;typename T&gt; </div>
 <p>
 Performs 2D convolution on the input image with a given kernel. <br>
  e.g., <pre>
-   OvImageT&lt;float&gt; ikernel, input, iresult;
+   <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> ikernel, input, iresult;
    input = random(0,100,50,50,1);
    ikernel = gaussian(7, 3);
    iresult = convolve2D(ikernel, input);
@@ -1999,7 +2174,7 @@ template&lt;typename T&gt; </div>
 <p>
 Performs 2D filtering on the input image with a given kernel. <br>
  e.g., <pre>
-   OvImageT&lt;float&gt; ikernel, input, iresult;
+   <a class="el" href="class_ov_image_t.html">OvImageT&lt;float&gt;</a> ikernel, input, iresult;
    input = random(0,100,50,50,1);
    ikernel = gaussian(7, 3);
    iresult = filter2D(ikernel, input);
@@ -2096,6 +2271,71 @@ template&lt;typename C&gt; </div>
 
 <p>
 e.g., i2 = floor(i1); 
+</div>
+</div><p>
+<a class="anchor" name="54b9933ff8471eced117ee266e982572"></a><!-- doxytag: member="OvImageT::gaborOriented" ref="54b9933ff8471eced117ee266e982572" args="(int size, double sigma, double period, double angle, double phaseshift)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt;double&gt; gaborOriented           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>sigma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>period</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>phaseshift</em> = <code>0</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [friend]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a gabor filter with arbitrary orientation e.g. (to use a filter with 45 degree orientation), <pre>
+    i1 = gaborOriented(10,3,3,45,0);
+ </pre> <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>height and width are both set equal to size </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>sigma</em>&nbsp;</td><td>halfwidth of the gaussian envelope </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>period</em>&nbsp;</td><td>the period of the sinusoid </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>the orientation of the sinusoid (degrees) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>phaseshift</em>&nbsp;</td><td>(the phase of the sinusoid in degrees (default is 0)). </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>See also:</b></dt><dd>OvImageT&lt;T&gt;::setGaborOriented(int size, double sigma, double period, double angle, double phaseshift) <p>
+<a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
+<a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY(int size, double sigma, double period, double phaseshift)</a> </dd></dl>
+
 </div>
 </div><p>
 <a class="anchor" name="f044c745dd2efebdd31aef4d15a66850"></a><!-- doxytag: member="OvImageT::gaborX" ref="f044c745dd2efebdd31aef4d15a66850" args="(int size, double sigma, double period, double phaseshift)" -->
@@ -4673,7 +4913,7 @@ width of the image
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 7 18:09:21 2006 for OpenVis3D by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 15 14:58:11 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>
