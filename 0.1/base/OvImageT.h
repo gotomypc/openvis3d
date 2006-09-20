@@ -1,6 +1,7 @@
 #ifndef __OVIMAGET_H
 #define __OVIMAGET_H
 
+#include "OvImageAdapter.h"
 
 ///Internal image class with overloaded math operators and utility functions.
 /** 
@@ -28,6 +29,8 @@ public:
 	void getDimensions(int & height, int & width, int & nColorChannels) const; //get image size
 	void resetDimensions(int height, int width, int nColorChannels = 1); //reset image dimensions and fill with zeros
 	void reshape(int height, int width, int nColorChannels = 1);  //reshape image without changing number of pixels
+	void normalizeIntensityRange(); //rescale image intensities to lie between 0 and 1
+
 
 	//for debugging
 	void print(void); /**< print image contents (only for debugging) */
@@ -183,7 +186,9 @@ public:
 	void setToGray();	//convert caller to gray image (single channel)
 	template<typename C> friend const OvImageT<C> rgb2gray(const OvImageT<C> & input);	 //convert color image (multiple channels) to gray image (single channel)
 
-
+	template<typename C> friend bool haveEqualDimensions (const OvImageT<C> & i1, const OvImageT<C> & i2); // Returns true if the two input images have the same height, width and channels
+	template<typename C> friend bool haveEqualHeightWidth (const OvImageT<C> & i1, const OvImageT<C> & i2); // Returns true if the two input images have the same height and width, ignores number of channels
+							
 	//desired functionality:
 	//imtransform (for general transformation matrix)
 	//generalized nonlinear block filter

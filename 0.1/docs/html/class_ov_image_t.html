@@ -42,6 +42,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#97b63ef9127a8475524db9444e570236">reshape</a> (int height, int width, int nColorChannels=1)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#0ee933f5ab4aece86a0dc057d75c79e2">normalizeIntensityRange</a> ()</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#e40604257e63254cac70e123ca32c646">print</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">T &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#3c117bf7189970bbd6b834ee829fc8cc">operator()</a> (int row, int column=0, int channel=0)</td></tr>
@@ -867,6 +869,30 @@ Copies and returns a rectangular sub-block of the image. e.g., <pre>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>the copied subimage </dd></dl>
 
+</div>
+</div><p>
+<a class="anchor" name="0ee933f5ab4aece86a0dc057d75c79e2"></a><!-- doxytag: member="OvImageT::normalizeIntensityRange" ref="0ee933f5ab4aece86a0dc057d75c79e2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::normalizeIntensityRange           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rescale image intensities to lie between 0 and 1. <br>
+ e.g, <pre>
+   i1.normalizeIntensityRange();
+ </pre> 
 </div>
 </div><p>
 <a class="anchor" name="3ca09770d731a7356c65bf11aa2c2310"></a><!-- doxytag: member="OvImageT::operator *=" ref="3ca09770d731a7356c65bf11aa2c2310" args="(const T &amp;rhs)" -->
@@ -2446,7 +2472,7 @@ Sets the image to a vertical gabor filter. e.g., <pre>
     <tr><td valign="top"></td><td valign="top"><em>phaseshift</em>&nbsp;</td><td>(the phase of the sinusoid in degrees (default is 0)). </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>an image of type OvImageT&lt;double&gt; </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>an image of type <a class="el" href="class_ov_image_t.html">OvImageT&lt;double&gt;</a> </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
 <a class="el" href="class_ov_image_t.html#9e8f2a6bb68757efd31cebf86662f604">OvImageT&lt;T&gt;::setToGaborY(int size, double sigma, double period, double phaseshift)</a> <p>
 <a class="el" href="class_ov_image_t.html#375b30cec3fcfca71f1a2c53ce774add">OvImageT&lt;T&gt;::setToGaborX(int size, double sigma, double period, double phaseshift)</a> <p>
@@ -2491,7 +2517,7 @@ Creates image equal to gaussian of half-width sigma and height and width equal t
     <tr><td valign="top"></td><td valign="top"><em>sigma</em>&nbsp;</td><td>halfwidth of the gaussian </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>an image of type OvImageT&lt;double&gt; </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>an image of type <a class="el" href="class_ov_image_t.html">OvImageT&lt;double&gt;</a> </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#7b5d3bbb55847426be6c7c5943e15742">OvImageT&lt;T&gt;::setToGaussian(int size, double sigma)</a> <p>
 <a class="el" href="class_ov_image_t.html#f044c745dd2efebdd31aef4d15a66850">gaborX(int size, double sigma, double period, double phaseshift)</a> <p>
 <a class="el" href="class_ov_image_t.html#fe29a69c2be08c42ff8aa07934ba6ba9">gaborY(int size, double sigma, double period, double phaseshift)</a> <p>
@@ -2922,7 +2948,7 @@ Creates an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its 
     <tr><td valign="top"></td><td valign="top"><em>dy</em>&nbsp;</td><td>stepsize along y (if omitted, default = 1) </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>an image of type OvImageT&lt;double&gt; </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>an image of type <a class="el" href="class_ov_image_t.html">OvImageT&lt;double&gt;</a> </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#4cf29265ca379dfcd7700d040a0b4bac">meshgridY(double x1, double x2, double y1, double y2, double dx, double dy)</a> <p>
 <a class="el" href="class_ov_image_t.html#bbaaa1a68fb1bc6c98b1aa4f2fb905dc">OvImageT&lt;T&gt;::setToMeshgridX(T x1, T x2, T y1, T y2, T dx, T dy)</a> <p>
 <a class="el" href="class_ov_image_t.html#3c23538c6ce076fd03a81c85250c9828">OvImageT&lt;T&gt;::setToMeshgridY(T x1, T x2, T y1, T y2, T dx, T dy)</a> </dd></dl>
@@ -2996,7 +3022,7 @@ Creates an image of height y2-y1+1 and width x2-x1+1 with each pixel set to its 
     <tr><td valign="top"></td><td valign="top"><em>dy</em>&nbsp;</td><td>stepsize along y (if omitted, default = 1) </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>an image of type OvImageT&lt;double&gt; </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>an image of type <a class="el" href="class_ov_image_t.html">OvImageT&lt;double&gt;</a> </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#10d1c2e8e3845b49b7a06037555f14a9">meshgridX(double x1, double x2, double y1, double y2, double dx, double dy)</a> <p>
 <a class="el" href="class_ov_image_t.html#3c23538c6ce076fd03a81c85250c9828">OvImageT&lt;T&gt;::setToMeshgridY(T x1, T x2, T y1, T y2, T dx, T dy)</a> <p>
 <a class="el" href="class_ov_image_t.html#bbaaa1a68fb1bc6c98b1aa4f2fb905dc">OvImageT&lt;T&gt;::setToMeshgridX(T x1, T x2, T y1, T y2, T dx, T dy)</a> </dd></dl>
@@ -4211,7 +4237,7 @@ e.g., <pre>
     <tr><td valign="top"></td><td valign="top"><em>nColorChannels</em>&nbsp;</td><td>desired number of color channels </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>a new image of type OvImageT&lt;double&gt; </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>a new image of type <a class="el" href="class_ov_image_t.html">OvImageT&lt;double&gt;</a> </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#023f12997c74e33609de5279713b4109">OvImageT&lt;T&gt;::setToRandom(double lowerbound, double upperbound)</a> </dd></dl>
 
 </div>
@@ -4913,7 +4939,7 @@ width of the image
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 15 14:58:11 2006 for OpenVis3D by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Wed Sep 20 11:46:58 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

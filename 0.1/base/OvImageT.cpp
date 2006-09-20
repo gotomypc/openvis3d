@@ -338,6 +338,34 @@ void OvImageT<T>::reshape(int height, int width, int nColorChannels)
 	}
 }
 
+/**
+* Rescale image intensities to lie between 0 and 1.
+* <br> e.g,
+* <pre>
+*   i1.normalizeIntensityRange();
+* </pre>
+*/
+template<typename T>
+void OvImageT<T>::normalizeIntensityRange()
+{
+	int i;
+	T minValue, maxValue, range; 
+	if(mSize==0) return;
+
+	minValue = maxValue = mData[0];
+	for(i=1; i<mSize; i++)
+	{
+		if(minValue>mData[i])minValue = mData[i];
+		if(maxValue<mData[i])maxValue = mData[i];
+	}
+	if(minValue==maxValue) return; //to avoid divide by zero later
+	range = maxValue-minValue;
+	
+	for(i=0; i<mSize; i++) mData[i] = (mData[i]-minValue)/range;
+}
+
+
+
 /** Access image data using a syntax like im(i,j,k) .
 * <p> e.g., 
 * <br> temp = im(1,2,1); //copy value of pixel at location row=1,col=2,channel=1 into variable temp
@@ -2746,6 +2774,32 @@ OvImageT<double> OvImageT<T>::getGaborPhaseStack()
   return result;
 }
 
+/**
+* Returns true if the two input images have the same dimensions (height, width, number of channels).
+* @param i1 first image
+* @param i2 second image
+* @return true (if same dimensions) or false (if different dimensions)
+* @see checkEqualHeightWidth(const OvImageT<T> & i1, const OvImageT<T> & i2)
+*/
+template<typename T> 
+bool haveEqualDimensions(const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	return ((i1.mWidth==i2.mWidth)&&(i1.mHeight==i2.mHeight)&&(i1.mChannels==i2.mChannels));
+}
+
+/**
+* Returns true if the two input images have the same height and width.
+* Note: This ignores the number of channels, hence the images may have different number of channels.
+* @param i1 first image
+* @param i2 second image
+* @return true or false 
+* @see checkEqualDimensions(const OvImageT<T> & i1, const OvImageT<T> & i2)
+*/
+template<typename T> 
+bool haveEqualHeightWidth(const OvImageT<T> & i1, const OvImageT<T> & i2)
+{
+	return ((i1.mWidth==i2.mWidth)&&(i1.mHeight==i2.mHeight));
+}
 
 
 #endif //__OVIMAGET_CPP
