@@ -38,6 +38,12 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#b1e8e17cc9278e3364856dd5622f52ca">getDimensions</a> (int &amp;height, int &amp;width, int &amp;nColorChannels) const </td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#984fbb8d52846f074477a0d892f8776f">getHeight</a> () const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#6516a60d6be253e78cb78e186e2cb2b5">getWidth</a> () const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#454ef900eb65f130d787b427a88b15fb">getChannels</a> () const </td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#be6ffb3a0d4ede0b06215ff4e5e37cd8">resetDimensions</a> (int height, int width, int nColorChannels=1)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#97b63ef9127a8475524db9444e570236">reshape</a> (int height, int width, int nColorChannels=1)</td></tr>
@@ -55,7 +61,7 @@
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;typename C&gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#f859a373b509eb49c84b096eefba1acc">operator=</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; C &gt; &amp;rhsImage)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#17e95855342303a04a10aa53280f171b">copyFromAdapter</a> (<a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a> &amp;iadapter)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#b46f8477fa6254cfd701bf591682a358">copyFromAdapter</a> (const <a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a> &amp;iadapter)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#a106fe269c049cb5a2234ab308cabfda">copyToAdapter</a> (<a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a> &amp;iadapter)</td></tr>
 
@@ -333,7 +339,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#4a6c0e5147d3d8f12fad7e1dff74ab2d">repmat</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;input, int height=1, int width=1, int channels=1)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#e6a745be82fb12d3d649c0de5448acc7">shiftImageXY</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;input, int rows=0, int columns=0)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#d46be5fa5be6c3c645ac952a5b65d6b0">shiftImageXY</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;input, int columns=0, int rows=0)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_t.html#6b97e124d1a8494262fd1756b7fe7b15">resizeNearestNbr</a> (const <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt; &amp;input, double scale, bool preSmooth=false)</td></tr>
 
@@ -578,7 +584,7 @@ Copies a certain input channel to a certain output channel. Note: the input shou
 
 </div>
 </div><p>
-<a class="anchor" name="17e95855342303a04a10aa53280f171b"></a><!-- doxytag: member="OvImageT::copyFromAdapter" ref="17e95855342303a04a10aa53280f171b" args="(OvImageAdapter &amp;iadapter)" -->
+<a class="anchor" name="b46f8477fa6254cfd701bf591682a358"></a><!-- doxytag: member="OvImageT::copyFromAdapter" ref="b46f8477fa6254cfd701bf591682a358" args="(const OvImageAdapter &amp;iadapter)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -587,7 +593,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::copyFromAdapter           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a> &amp;&nbsp;</td>
+          <td class="paramtype">const <a class="el" href="class_ov_image_adapter.html">OvImageAdapter</a> &amp;&nbsp;</td>
           <td class="paramname"> <em>iadapter</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -724,7 +730,29 @@ Exports image to an <a class="el" href="class_ov_image_adapter.html">OvImageAdap
     i1.copyFromAdapter(*opencvAdaptor); //Now the opencv image is copied to i1
     i1 = i1/2;	//divide all pixel values by 2
     i1.copyToAdapter(*opencvAdaptor); //copy back to opencv image
- </pre> <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="class_ov_image_t.html#17e95855342303a04a10aa53280f171b">copyFromAdapter(OvImageAdapter &amp; iadapter)</a> </dd></dl>
+ </pre> <dl compact><dt><b>See also:</b></dt><dd>copyFromAdapter(OvImageAdapter &amp; iadapter) </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="454ef900eb65f130d787b427a88b15fb"></a><!-- doxytag: member="OvImageT::getChannels" ref="454ef900eb65f130d787b427a88b15fb" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::getChannels           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the number of channels of the image. <dl compact><dt><b>Returns:</b></dt><dd>number of channels </dd></dl>
 
 </div>
 </div><p>
@@ -803,6 +831,28 @@ Run Gabor filters with 4 orientation and 4 scales, and return the phases at each
 
 </div>
 </div><p>
+<a class="anchor" name="984fbb8d52846f074477a0d892f8776f"></a><!-- doxytag: member="OvImageT::getHeight" ref="984fbb8d52846f074477a0d892f8776f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::getHeight           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the height of the image. <dl compact><dt><b>Returns:</b></dt><dd>height of the image </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="c06f89b78c7441b78d8e53b9f36593fc"></a><!-- doxytag: member="OvImageT::getSubImage" ref="c06f89b78c7441b78d8e53b9f36593fc" args="(int rowLo=-1, int rowHi=-1, int columnLo=-1, int columnHi=-1, int channelLo=-1, int channelHi=-1)" -->
 <div class="memitem">
 <div class="memproto">
@@ -868,6 +918,28 @@ Copies and returns a rectangular sub-block of the image. e.g., <pre>
   </table>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>the copied subimage </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="6516a60d6be253e78cb78e186e2cb2b5"></a><!-- doxytag: member="OvImageT::getWidth" ref="6516a60d6be253e78cb78e186e2cb2b5" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="class_ov_image_t.html">OvImageT</a>&lt; T &gt;::getWidth           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the width of the image. <dl compact><dt><b>Returns:</b></dt><dd>width of the image </dd></dl>
 
 </div>
 </div><p>
@@ -4451,7 +4523,7 @@ template&lt;typename C&gt; </div>
 e.g., i2 = round(i1); 
 </div>
 </div><p>
-<a class="anchor" name="e6a745be82fb12d3d649c0de5448acc7"></a><!-- doxytag: member="OvImageT::shiftImageXY" ref="e6a745be82fb12d3d649c0de5448acc7" args="(const OvImageT&lt; T &gt; &amp;input, int rows=0, int columns=0)" -->
+<a class="anchor" name="d46be5fa5be6c3c645ac952a5b65d6b0"></a><!-- doxytag: member="OvImageT::shiftImageXY" ref="d46be5fa5be6c3c645ac952a5b65d6b0" args="(const OvImageT&lt; T &gt; &amp;input, int columns=0, int rows=0)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -4467,13 +4539,13 @@ template&lt;typename T&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>rows</em> = <code>0</code>, </td>
+          <td class="paramname"> <em>columns</em> = <code>0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>columns</em> = <code>0</code></td><td>&nbsp;</td>
+          <td class="paramname"> <em>rows</em> = <code>0</code></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -4488,12 +4560,12 @@ template&lt;typename T&gt; </div>
 Creates a translated copy of an image. <p>
 e.g., <br>
  i2 = shiftImageXY(i1,10,20); <br>
- Here, i2 is i1 shifted vertically down by 10 pixels and to the right by 20 pixels. <br>
+ Here, i2 is i1 shifted vertically to the right by 10 pixels and down by 20 pixels. <br>
  Note: i1 and i2 have the same dimensions.  <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>input</em>&nbsp;</td><td>the input image </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>rows</em>&nbsp;</td><td>vertical translation in pixels (default = 0) </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>columns</em>&nbsp;</td><td>horizontal translation in pixels (default = 0) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>rows</em>&nbsp;</td><td>vertical translation in pixels (default = 0) </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>translated image </dd></dl>
@@ -4938,8 +5010,8 @@ width of the image
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
-<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageT.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Sep 20 11:46:58 2006 for OpenVis3D by&nbsp;
+<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvImageT.h<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvImageT.cpp</ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 30 13:31:47 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

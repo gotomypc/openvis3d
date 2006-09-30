@@ -11,7 +11,7 @@
 * @author Abhijit Ogale
 */
 template<typename T>
-class BTLocalMatcherT: public OvLocalMatcherT<T>
+class BTLocalMatcherT : public OvLocalMatcherT<T>
 {
 public:
 
@@ -34,13 +34,13 @@ protected:
 		
 	/**
 	* Alpha is a constant used to convert
-	* raw pixel intensity matches dI into the range 0 to 1 using exp(-alpha*dI), 
+	* raw pixel intensity matches dI into the range 0 to 1 using exp(-alpha*dI/255), 
 	* where alpha is specified by the user as follows:
 	* <pre> 
 	*   double params[] = {20.0};
 	*	btmatcher.setMatchingParams(1,params);
 	* </pre>
-	* In this example, alpha is set to 20
+	* In this example, alpha is set to 20. Smaller values of alpha cause more smoothing.
 	* @see setMatchingParams(int nparams, double*params)
 	*/
 	double alpha; 
