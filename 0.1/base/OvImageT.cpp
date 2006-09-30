@@ -204,7 +204,7 @@ OvImageT<T>::~OvImageT()
 * @see copyToAdapter(OvImageAdapter & iadapter)
 */
 template<typename T>
-bool OvImageT<T>::copyFromAdapter(OvImageAdapter & iadapter)
+bool OvImageT<T>::copyFromAdapter(const OvImageAdapter & iadapter)
 {
 	int i,j,k;
 	int height, width, ncolors;
@@ -273,6 +273,37 @@ void OvImageT<T>::getDimensions(int & height, int & width, int & nColorChannels)
 	width = mWidth;
 	nColorChannels = mChannels;
 }
+
+/**
+* Returns the height of the image.
+* @return height of the image
+*/
+template<typename T>
+int OvImageT<T>::getHeight() const
+{
+	return mHeight;
+}
+
+/**
+* Returns the width of the image.
+* @return width of the image
+*/
+template<typename T>
+int OvImageT<T>::getWidth() const
+{
+	return mWidth;
+}
+
+/**
+* Returns the number of channels of the image.
+* @return number of channels
+*/
+template<typename T>
+int OvImageT<T>::getChannels() const
+{
+	return mChannels;
+}
+
 
 /**
 * Resets the image to the specified dimensions and zeroes all pixel values.
@@ -2139,25 +2170,25 @@ const OvImageT<T> repmat (const OvImageT<T> & input, int height=1, int width=1, 
 * Creates a translated copy of an image.
 * <p> e.g., 
 * <br> i2 = shiftImageXY(i1,10,20);
-* <br> Here, i2 is i1 shifted vertically down by 10 pixels and to the right by 20 pixels.
+* <br> Here, i2 is i1 shifted vertically to the right by 10 pixels and down by 20 pixels.
 * <br> Note: i1 and i2 have the same dimensions.
 * </p>
 * @param input the input image
-* @param rows vertical translation in pixels (default = 0)
 * @param columns horizontal translation in pixels (default = 0)
+* @param rows vertical translation in pixels (default = 0)
 * @return translated image
 */
 template<typename T> 
-const OvImageT<T> shiftImageXY (const OvImageT<T> & input, int rows=0, int columns=0)
+const OvImageT<T> shiftImageXY (const OvImageT<T> & input, int columns=0, int rows=0)
 {	
 	OvImageT<T> result(input,false);
 	int i,j,k, iLow, iHigh, jLow, jHigh;
 
 	if(rows>=0) {iLow = rows; iHigh = result.mHeight;}
-	else {iLow = 0; iHigh = result.mHeight-rows;}
+	else {iLow = 0; iHigh = result.mHeight + rows;}
 
 	if(columns>=0) {jLow = columns; jHigh = result.mWidth;}
-	else {jLow = 0; jHigh = result.mWidth-columns;}
+	else {jLow = 0; jHigh = result.mWidth + columns;}
 
 	for(k=0; k<result.mChannels;k++)
 		for(j=jLow; j<jHigh;j++)

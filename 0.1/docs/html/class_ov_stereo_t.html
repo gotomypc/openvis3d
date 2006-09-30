@@ -33,7 +33,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_stereo_t.html#5fc771a3dd833b317889df3aaf426459">setImagePairPreprocessorParams</a> (int nparams, double *params)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_stereo_t.html#0aeeb0aa038e89197ce708ff39717fb2">setLocalImageMatcher</a> (<a class="el" href="class_ov_local_matcher_t.html">OvLocalMatcherT</a>&lt; T &gt; &amp;localImageMatcher)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_stereo_t.html#911b6b22bb137879dab183c7386e28da">setLocalImageMatcher</a> (<a class="el" href="class_ov_local_matcher_t.html">OvLocalMatcherT</a>&lt; T &gt; &amp;localImageMatcher)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_stereo_t.html#9e9c13160b454266771714a868d32aab">setLocalImageMatcherParams</a> (int nparams, double *params)</td></tr>
 
@@ -180,6 +180,8 @@ Main method for executing stereo matching on an image pair. Note: This method mo
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i1</em>&nbsp;</td><td>the first image </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i2</em>&nbsp;</td><td>the second image </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>minshift</em>&nbsp;</td><td>method searches for disparities from minshift to maxshift </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>maxshift</em>&nbsp;</td><td>method searches for disparities from minshift to maxshift </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>leftDisparityMap</em>&nbsp;</td><td>the disparity map for the left image. (method returns this). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>rightDisparityMap</em>&nbsp;</td><td>the disparity map for the right image. (method returns this). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>leftOcclusions</em>&nbsp;</td><td>the occlusion map for the left image. (method returns this). </td></tr>
@@ -341,7 +343,7 @@ template&lt;typename T&gt; </div>
 <p>
 Specifies the image pair preprocessor. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>localImageMatcher</em>&nbsp;</td><td>this specifies the preprocessor to be used. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>imagePairPreprocessor</em>&nbsp;</td><td>this specifies the preprocessor to be used. </td></tr>
   </table>
 </dl>
 
@@ -385,14 +387,14 @@ Useful to set any parameters of the image pair preprocessor. <dl compact><dt><b>
 
 </div>
 </div><p>
-<a class="anchor" name="0aeeb0aa038e89197ce708ff39717fb2"></a><!-- doxytag: member="OvStereoT::setLocalImageMatcher" ref="0aeeb0aa038e89197ce708ff39717fb2" args="(OvLocalMatcherT&lt; T &gt; &amp;localImageMatcher)" -->
+<a class="anchor" name="911b6b22bb137879dab183c7386e28da"></a><!-- doxytag: member="OvStereoT::setLocalImageMatcher" ref="911b6b22bb137879dab183c7386e28da" args="(OvLocalMatcherT&lt; T &gt; &amp;localImageMatcher)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="class_ov_stereo_t.html">OvStereoT</a>&lt; T &gt;::setLocalImageMatcher           </td>
+          <td class="memname">void <a class="el" href="class_ov_stereo_t.html">OvStereoT</a>&lt; T &gt;::setLocalImageMatcher           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ov_local_matcher_t.html">OvLocalMatcherT</a>&lt; T &gt; &amp;&nbsp;</td>
           <td class="paramname"> <em>localImageMatcher</em>          </td>
@@ -520,8 +522,8 @@ Global stereo algorithm
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
-<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvStereoT.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvStereoT.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Sep 20 11:46:58 2006 for OpenVis3D by&nbsp;
+<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvStereoT.h<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvStereoT.cpp</ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 30 13:31:47 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

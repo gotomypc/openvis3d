@@ -45,14 +45,14 @@ public:
 	* @param width width of image
 	* @param nColorChannels number of color channels of image
 	*/
-	virtual void getSize(int & height, int & width, int & nColorChannels); 
+	virtual void getSize(int & height, int & width, int & nColorChannels) const; 
 
 	/**
 	* Returns data type of image.
 	* @param dataType data type of image (from enum OvDataType)
 	* @see OvDataType
 	*/
-	virtual void getDataType(OvImageAdapter::OvDataType & dataType);
+	virtual void getDataType(OvImageAdapter::OvDataType & dataType) const;
 
 	/**
 	* Returns a pixel value at a particular row, column and color channel.

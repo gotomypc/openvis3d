@@ -27,6 +27,9 @@ public:
 	virtual ~OvImageT();
 	
 	void getDimensions(int & height, int & width, int & nColorChannels) const; //get image size
+	int getHeight() const;
+	int getWidth() const;
+	int getChannels() const;
 	void resetDimensions(int height, int width, int nColorChannels = 1); //reset image dimensions and fill with zeros
 	void reshape(int height, int width, int nColorChannels = 1);  //reshape image without changing number of pixels
 	void normalizeIntensityRange(); //rescale image intensities to lie between 0 and 1
@@ -43,7 +46,7 @@ public:
 	template <typename C> OvImageT<T>& operator = (const OvImageT<C> & rhsImage); //convert from one template type to another (e.g., float to int)
 
 	//special copying methods
-	bool copyFromAdapter(OvImageAdapter & iadapter); //import values from OvImageAdapter
+	bool copyFromAdapter(const OvImageAdapter & iadapter); //import values from OvImageAdapter
 	bool copyToAdapter(OvImageAdapter & iadapter); //export values to OvImageAdapter if it has same dimensions
 	bool copyMasked(const OvImageT<bool> & mask, const OvImageT<T> & srcImage); //copy values from srcImage only for pixels where mask is set to true
 	bool copyMasked(const OvImageT<bool> & mask, const T & value); //set pixels = value only where mask is set to true
@@ -154,7 +157,7 @@ public:
 	template<typename C> friend const OvImageT<C> flipUD(const OvImageT<C> & input); //flip image upside-down (i.e., about horizontal axis)
 
 	template<typename C> friend const OvImageT<C> repmat (const OvImageT<C> & input, int height, int width, int channels); //tile input image 'height' times vertically, 'width' times horizontally, and 'channels' times along color channels
-	template<typename C> friend const OvImageT<C> shiftImageXY (const OvImageT<C> & input, int rows, int columns); //return copy of input image translated by (rows, columns)
+	template<typename C> friend const OvImageT<C> shiftImageXY (const OvImageT<C> & input, int columns, int rows); //return copy of input image translated by (rows, columns)
 
 	template<typename C> friend const OvImageT<C> resizeNearestNbr(const OvImageT<C> & input, double scale, bool preSmooth);	//rescale image using nearest neighbor method; use preSmooth to enable resampling
 	template<typename C> friend const OvImageT<C> resizeBilinear(const OvImageT<C> & input, double scale, bool preSmooth);		//rescale image using bilinear interpolation method; use preSmooth to enable resampling

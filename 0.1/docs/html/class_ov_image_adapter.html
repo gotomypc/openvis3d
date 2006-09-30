@@ -75,9 +75,9 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#1a522ef02079cfd27556410a80a1b00d">~OvImageAdapter</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#c78319e778a94f70e3db0eff5b989d53">getSize</a> (int &amp;height, int &amp;width, int &amp;nColorChannels)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#bb76f5a1fa337831e86c6a4a715672c3">getSize</a> (int &amp;height, int &amp;width, int &amp;nColorChannels) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#7b84407d4653e3886db0a41eb50d7cbe">getDataType</a> (<a class="el" href="class_ov_image_adapter.html#9a8c12654e74b780717ce8d84d0c907a">OvImageAdapter::OvDataType</a> &amp;dataType)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#54fc81d32f570ff49551e65662b90ad5">getDataType</a> (<a class="el" href="class_ov_image_adapter.html#9a8c12654e74b780717ce8d84d0c907a">OvImageAdapter::OvDataType</a> &amp;dataType) const </td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ov_image_adapter.html#8bb89fcb2fa478bb8810ddc66a0d0b94">getPixel</a> (int row, int column, int channel) const =0</td></tr>
 
@@ -185,7 +185,7 @@ Destructor
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="7b84407d4653e3886db0a41eb50d7cbe"></a><!-- doxytag: member="OvImageAdapter::getDataType" ref="7b84407d4653e3886db0a41eb50d7cbe" args="(OvImageAdapter::OvDataType &amp;dataType)" -->
+<a class="anchor" name="54fc81d32f570ff49551e65662b90ad5"></a><!-- doxytag: member="OvImageAdapter::getDataType" ref="54fc81d32f570ff49551e65662b90ad5" args="(OvImageAdapter::OvDataType &amp;dataType) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -195,7 +195,7 @@ Destructor
           <td class="paramtype"><a class="el" href="class_ov_image_adapter.html#9a8c12654e74b780717ce8d84d0c907a">OvImageAdapter::OvDataType</a> &amp;&nbsp;</td>
           <td class="paramname"> <em>dataType</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"><code> [virtual]</code></td>
+          <td width="100%"> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -256,7 +256,7 @@ Returns a pixel value at a particular row, column and color channel. This is a p
 Implemented in <a class="el" href="class_matlab_image_adapter.html#da4d5f8affc037b93057c5634d3f429d">MatlabImageAdapter</a>, and <a class="el" href="class_open_c_v_image_adapter.html#a0f68b17b4261c31dafe2037987f23af">OpenCVImageAdapter</a>.
 </div>
 </div><p>
-<a class="anchor" name="c78319e778a94f70e3db0eff5b989d53"></a><!-- doxytag: member="OvImageAdapter::getSize" ref="c78319e778a94f70e3db0eff5b989d53" args="(int &amp;height, int &amp;width, int &amp;nColorChannels)" -->
+<a class="anchor" name="bb76f5a1fa337831e86c6a4a715672c3"></a><!-- doxytag: member="OvImageAdapter::getSize" ref="bb76f5a1fa337831e86c6a4a715672c3" args="(int &amp;height, int &amp;width, int &amp;nColorChannels) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -281,7 +281,7 @@ Implemented in <a class="el" href="class_matlab_image_adapter.html#da4d5f8affc03
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"><code> [virtual]</code></td>
+          <td></td><td></td><td width="100%"> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -412,8 +412,8 @@ width of the image
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
-<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageAdapter.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/OvImageAdapter.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Sep 20 11:46:58 2006 for OpenVis3D by&nbsp;
+<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvImageAdapter.h<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/OvImageAdapter.cpp</ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 30 13:31:47 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

@@ -64,7 +64,9 @@ bool BTLocalMatcherT<T>::setParams(int nparams, double*params)
 template<typename T>
 const OvImageT<double> BTLocalMatcherT<T>::getMatch(int shiftx, int shifty=0)
 {
-	return exp(-alpha*sum(abs(getRawMatch(shiftx,shifty)),3));
+	double tempAlpha;
+	tempAlpha = alpha/255.0;
+	return exp(-tempAlpha*mean(abs(getRawMatch(shiftx,shifty)),3));
 }
 
 /**

@@ -290,10 +290,10 @@ template&lt;typename T&gt; </div>
 <div class="memdoc">
 
 <p>
-Alpha is a constant used to convert raw pixel intensity matches dI into the range 0 to 1 using exp(-alpha*dI), where alpha is specified by the user as follows: <pre> 
+Alpha is a constant used to convert raw pixel intensity matches dI into the range 0 to 1 using exp(-alpha*dI/255), where alpha is specified by the user as follows: <pre> 
    double params[] = {20.0};
 	btmatcher.setMatchingParams(1,params);
- </pre> In this example, alpha is set to 20 <dl compact><dt><b>See also:</b></dt><dd>setMatchingParams(int nparams, double*params) </dd></dl>
+ </pre> In this example, alpha is set to 20. Smaller values of alpha cause more smoothing. <dl compact><dt><b>See also:</b></dt><dd>setMatchingParams(int nparams, double*params) </dd></dl>
 
 </div>
 </div><p>
@@ -400,8 +400,8 @@ precomputed minimum image from i2 for speeding up Birchfield Tomasi matching.
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
-<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/BTLocalMatcherT.h<li>C:/Documents and Settings/ogale/Desktop/openvis3d/0.1/base/BTLocalMatcherT.cpp</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Sep 20 11:46:57 2006 for OpenVis3D by&nbsp;
+<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/BTLocalMatcherT.h<li>C:/Documents and Settings/Abhijit/Desktop/My Stuff/Code/Visual Studio 2005 Projects/openvis3d/0.1/base/BTLocalMatcherT.cpp</ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 30 13:31:46 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>

@@ -5,7 +5,6 @@
 #include "OvImageT.h"
 #include "OvImagePairPreprocessorT.h"
 #include "OvLocalMatcherT.h"
-#include "BTLocalMatcherT.h"
 #include "OvStereoGlobalMatcherT.h"
 #include "OvDisparityPostProcessor.h"
 
@@ -29,7 +28,7 @@ public:
 
 	/**
 	* Specifies the image pair preprocessor.
-	* @param localImageMatcher this specifies the preprocessor to be used.
+	* @param imagePairPreprocessor this specifies the preprocessor to be used.
 	*/
 	virtual void setImagePairPreprocessor(OvImagePairPreprocessorT<T> & imagePairPreprocessor);
 
@@ -89,6 +88,8 @@ public:
 	* Note: This method modifies the input images, so be careful.
 	* @param i1 the first image
 	* @param i2 the second image
+	* @param minshift method searches for disparities from minshift to maxshift
+	* @param maxshift method searches for disparities from minshift to maxshift
 	* @param leftDisparityMap the disparity map for the left image. (method returns this).
 	* @param rightDisparityMap the disparity map for the right image. (method returns this).
 	* @param leftOcclusions the occlusion map for the left image. (method returns this).
