@@ -61,7 +61,8 @@
 : <a class="el" href="class_ov_image_t.html#a106fe269c049cb5a2234ab308cabfda">OvImageT&lt; T &gt;</a></ul>
 <h3><a class="anchor" name="index_d">- d -</a></h3><ul>
 <li>doMatching()
-: <a class="el" href="class_ov_stereo_global_matcher_t.html#5657f1bfbc13a3cb74823fbf6986a4ec">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#f0099b11b0565bc629c6501dc024b760">OvStereoDiffuseMatcherT&lt; T &gt;</a><li>doStereoMatching()
+: <a class="el" href="class_ov_stereo_global_matcher_t.html#5657f1bfbc13a3cb74823fbf6986a4ec">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#f0099b11b0565bc629c6501dc024b760">OvStereoDiffuseMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_global_matcher_t.html#2186fcb6dfbf1d75271b05efd794f16d">OvFlowGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_diffuse_matcher_t.html#3e6672e5c96bca16bf584d2a89d6147d">OvFlowDiffuseMatcherT&lt; T &gt;</a><li>doOpticalFlow()
+: <a class="el" href="class_ov_flow_t.html#efab86230c3fa9988f782f6d828e508e">OvFlowT&lt; T &gt;</a><li>doStereoMatching()
 : <a class="el" href="class_ov_stereo_t.html#687191e4c14f7de1e6c59f11fc96bb75">OvStereoT&lt; T &gt;</a></ul>
 <h3><a class="anchor" name="index_f">- f -</a></h3><ul>
 <li>filter2D()
@@ -114,7 +115,11 @@
 : <a class="el" href="class_ov_image_t.html#fb4ffe3acdf6245dab0b081389e98960">OvImageT&lt; T &gt;</a><li>operator/=()
 : <a class="el" href="class_ov_image_t.html#d38bb8404710043605ab3fa4cf43ea34">OvImageT&lt; T &gt;</a><li>operator=()
 : <a class="el" href="class_ov_image_t.html#f859a373b509eb49c84b096eefba1acc">OvImageT&lt; T &gt;</a><li>OvDisparityPostprocessor()
-: <a class="el" href="class_ov_disparity_postprocessor.html#7fea47e603ce3fe1ca6a5b3b9dcb44fd">OvDisparityPostprocessor</a><li>OvImageAdapter()
+: <a class="el" href="class_ov_disparity_postprocessor.html#7fea47e603ce3fe1ca6a5b3b9dcb44fd">OvDisparityPostprocessor</a><li>OvFlowDiffuseMatcherT()
+: <a class="el" href="class_ov_flow_diffuse_matcher_t.html#7584123521512252961dba097f7a05aa">OvFlowDiffuseMatcherT&lt; T &gt;</a><li>OvFlowGlobalMatcherT()
+: <a class="el" href="class_ov_flow_global_matcher_t.html#07f96053a8725aca74371ba439cb307e">OvFlowGlobalMatcherT&lt; T &gt;</a><li>OvFlowPostprocessor()
+: <a class="el" href="class_ov_flow_postprocessor.html#ee17b6990b9b7306804b356f069381d2">OvFlowPostprocessor</a><li>OvFlowT()
+: <a class="el" href="class_ov_flow_t.html#1d8ff6b2a30d6a79cedcabf3c4ffe801">OvFlowT&lt; T &gt;</a><li>OvImageAdapter()
 : <a class="el" href="class_ov_image_adapter.html#f29e6cacb16f4a93924b383b68041620">OvImageAdapter</a><li>OvImagePairPreprocessorT()
 : <a class="el" href="class_ov_image_pair_preprocessor_t.html#228ea28e8364eb26af59f34c250aafd0">OvImagePairPreprocessorT&lt; T &gt;</a><li>OvImageT()
 : <a class="el" href="class_ov_image_t.html#ae30f9c977e0dddb12390ee4074eb790">OvImageT&lt; T &gt;</a><li>OvLocalMatcherT()
@@ -124,7 +129,8 @@
 : <a class="el" href="class_ov_stereo_t.html#31cb9c92c3550f3bf0547fa2cc9799a0">OvStereoT&lt; T &gt;</a></ul>
 <h3><a class="anchor" name="index_p">- p -</a></h3><ul>
 <li>postProcessDisparity()
-: <a class="el" href="class_ov_disparity_postprocessor.html#473de4de64cd4776109b8d517edd625e">OvDisparityPostprocessor</a><li>preProcessImagePair()
+: <a class="el" href="class_ov_disparity_postprocessor.html#473de4de64cd4776109b8d517edd625e">OvDisparityPostprocessor</a><li>postProcessFlow()
+: <a class="el" href="class_ov_flow_postprocessor.html#43d6cc456f91872c9388f3be178633ef">OvFlowPostprocessor</a><li>preProcessImagePair()
 : <a class="el" href="class_ov_image_pair_preprocessor_t.html#10cd03595eb48ef955bf01ffbccf6b29">OvImagePairPreprocessorT&lt; T &gt;</a><li>print()
 : <a class="el" href="class_ov_image_t.html#e40604257e63254cac70e123ca32c646">OvImageT&lt; T &gt;</a></ul>
 <h3><a class="anchor" name="index_r">- r -</a></h3><ul>
@@ -138,15 +144,17 @@
 <h3><a class="anchor" name="index_s">- s -</a></h3><ul>
 <li>setDisparityPostprocessor()
 : <a class="el" href="class_ov_stereo_t.html#ea38ba09e02bd6709abf6ce9813db661">OvStereoT&lt; T &gt;</a><li>setDisparityPostprocessorParams()
-: <a class="el" href="class_ov_stereo_t.html#b72ae34139510c6af59c2eaccf71b6a2">OvStereoT&lt; T &gt;</a><li>setGlobalMatcher()
-: <a class="el" href="class_ov_stereo_t.html#c1e794fdd713c4d0a7b8f070335b60e5">OvStereoT&lt; T &gt;</a><li>setGlobalMatcherParams()
-: <a class="el" href="class_ov_stereo_t.html#ebfa1ef147a3283ddbdc8ca040add1a7">OvStereoT&lt; T &gt;</a><li>setImagePair()
+: <a class="el" href="class_ov_stereo_t.html#b72ae34139510c6af59c2eaccf71b6a2">OvStereoT&lt; T &gt;</a><li>setFlowPostprocessor()
+: <a class="el" href="class_ov_flow_t.html#25dc46a04654f24f2f007d2e56dabfb4">OvFlowT&lt; T &gt;</a><li>setFlowPostprocessorParams()
+: <a class="el" href="class_ov_flow_t.html#6c7be3aa1eb0204e10fc0e0f77329ca6">OvFlowT&lt; T &gt;</a><li>setGlobalMatcher()
+: <a class="el" href="class_ov_stereo_t.html#c1e794fdd713c4d0a7b8f070335b60e5">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#6245a9007ce085ccde44a6d6caa822cd">OvFlowT&lt; T &gt;</a><li>setGlobalMatcherParams()
+: <a class="el" href="class_ov_stereo_t.html#ebfa1ef147a3283ddbdc8ca040add1a7">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#a052571eae0df6519ca22244390453bf">OvFlowT&lt; T &gt;</a><li>setImagePair()
 : <a class="el" href="class_ov_local_matcher_t.html#744cccbeb93542013568da92fc18bbd4">OvLocalMatcherT&lt; T &gt;</a>, <a class="el" href="class_b_t_local_matcher_t.html#8c13a47cf0e3c26a5bb908c9135dcf30">BTLocalMatcherT&lt; T &gt;</a><li>setImagePairPreprocessor()
-: <a class="el" href="class_ov_stereo_t.html#1c82003401e2c0684b3ebd70ab7a5683">OvStereoT&lt; T &gt;</a><li>setImagePairPreprocessorParams()
-: <a class="el" href="class_ov_stereo_t.html#5fc771a3dd833b317889df3aaf426459">OvStereoT&lt; T &gt;</a><li>setLocalImageMatcher()
-: <a class="el" href="class_ov_stereo_t.html#911b6b22bb137879dab183c7386e28da">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_global_matcher_t.html#204ebac0bdc88c3ecc0c28c4ad4dd2f3">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#bfab2c95d5949f1791288deb729da591">OvStereoDiffuseMatcherT&lt; T &gt;</a><li>setLocalImageMatcherParams()
-: <a class="el" href="class_ov_stereo_t.html#9e9c13160b454266771714a868d32aab">OvStereoT&lt; T &gt;</a><li>setParams()
-: <a class="el" href="class_ov_stereo_global_matcher_t.html#5acd8c326b24a0a7e37951de0371c33a">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#6bae469751b7874fe7c24a5cd542e9e4">OvStereoDiffuseMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_local_matcher_t.html#c9e248111bf5b0bdfcd945aee06321e0">OvLocalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_image_pair_preprocessor_t.html#244f0b165ef86133bb26c45103204cfb">OvImagePairPreprocessorT&lt; T &gt;</a>, <a class="el" href="class_ov_disparity_postprocessor.html#438133325d842c1e9c9151b481a91cba">OvDisparityPostprocessor</a>, <a class="el" href="class_b_t_local_matcher_t.html#84f52db72c6381e6c2151d7d4bfd53cb">BTLocalMatcherT&lt; T &gt;</a><li>setPixel()
+: <a class="el" href="class_ov_stereo_t.html#1c82003401e2c0684b3ebd70ab7a5683">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#1a196a183ba970ef8e5cf4ba135d8fe7">OvFlowT&lt; T &gt;</a><li>setImagePairPreprocessorParams()
+: <a class="el" href="class_ov_stereo_t.html#5fc771a3dd833b317889df3aaf426459">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#90ea42c19c37d1b04c2695165f42b72f">OvFlowT&lt; T &gt;</a><li>setLocalImageMatcher()
+: <a class="el" href="class_ov_stereo_t.html#911b6b22bb137879dab183c7386e28da">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_global_matcher_t.html#204ebac0bdc88c3ecc0c28c4ad4dd2f3">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#bfab2c95d5949f1791288deb729da591">OvStereoDiffuseMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#6a22e7c929375e892439fa2006d75244">OvFlowT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_global_matcher_t.html#7354082b21b6e72e484c2db83b0f2db5">OvFlowGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_diffuse_matcher_t.html#508ed891c063b23cb6d7ab5a277bafcc">OvFlowDiffuseMatcherT&lt; T &gt;</a><li>setLocalImageMatcherParams()
+: <a class="el" href="class_ov_stereo_t.html#9e9c13160b454266771714a868d32aab">OvStereoT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_t.html#591b3ec09e3858f6f93cd59b95684662">OvFlowT&lt; T &gt;</a><li>setParams()
+: <a class="el" href="class_ov_stereo_global_matcher_t.html#5acd8c326b24a0a7e37951de0371c33a">OvStereoGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#6bae469751b7874fe7c24a5cd542e9e4">OvStereoDiffuseMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_local_matcher_t.html#c9e248111bf5b0bdfcd945aee06321e0">OvLocalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_image_pair_preprocessor_t.html#244f0b165ef86133bb26c45103204cfb">OvImagePairPreprocessorT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_postprocessor.html#a198c4d182f7e6ecf84ab30efb5c5e4c">OvFlowPostprocessor</a>, <a class="el" href="class_ov_flow_global_matcher_t.html#da19fe0ecb83f3c08b45effc1190e971">OvFlowGlobalMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_flow_diffuse_matcher_t.html#ed3df49bc80367ec4aa10ce861dd7ee6">OvFlowDiffuseMatcherT&lt; T &gt;</a>, <a class="el" href="class_ov_disparity_postprocessor.html#438133325d842c1e9c9151b481a91cba">OvDisparityPostprocessor</a>, <a class="el" href="class_b_t_local_matcher_t.html#84f52db72c6381e6c2151d7d4bfd53cb">BTLocalMatcherT&lt; T &gt;</a><li>setPixel()
 : <a class="el" href="class_open_c_v_image_adapter.html#d5750b5523a652a1ad4fc831f96cb294">OpenCVImageAdapter</a>, <a class="el" href="class_matlab_image_adapter.html#1f11ca2a3a64ada8afccdc307f7ddb62">MatlabImageAdapter</a>, <a class="el" href="class_ov_image_adapter.html#46f8245d4d99103b01699fd22a6aa1cc">OvImageAdapter</a><li>setPixeldoNothing()
 : <a class="el" href="class_open_c_v_image_adapter.html#4d4ce033af83cecaea7a62f67c7675dc">OpenCVImageAdapter</a>, <a class="el" href="class_matlab_image_adapter.html#e72c4a4bc9b5e561e58775f11fb1fb34">MatlabImageAdapter</a><li>setPixelT()
 : <a class="el" href="class_open_c_v_image_adapter.html#b2b89b0b09c1cfa32e4b9af484f7992e">OpenCVImageAdapter</a>, <a class="el" href="class_matlab_image_adapter.html#e2827716201ef30ee50087722c762461">MatlabImageAdapter</a><li>setToGaborOriented()
@@ -171,7 +179,11 @@
 : <a class="el" href="class_b_t_local_matcher_t.html#894654ccc50250d424580bc4539b2e72">BTLocalMatcherT&lt; T &gt;</a><li>~MatlabImageAdapter()
 : <a class="el" href="class_matlab_image_adapter.html#e4d61ecdc3ab90888d76b9611575e85d">MatlabImageAdapter</a><li>~OpenCVImageAdapter()
 : <a class="el" href="class_open_c_v_image_adapter.html#5540d41e8077310dd1ee84f36488ae5b">OpenCVImageAdapter</a><li>~OvDisparityPostprocessor()
-: <a class="el" href="class_ov_disparity_postprocessor.html#e36a3535f09a93705dc6bf6cdabc936a">OvDisparityPostprocessor</a><li>~OvImageAdapter()
+: <a class="el" href="class_ov_disparity_postprocessor.html#e36a3535f09a93705dc6bf6cdabc936a">OvDisparityPostprocessor</a><li>~OvFlowDiffuseMatcherT()
+: <a class="el" href="class_ov_flow_diffuse_matcher_t.html#e5aa67e63b0e2da25609a9be886149e4">OvFlowDiffuseMatcherT&lt; T &gt;</a><li>~OvFlowGlobalMatcherT()
+: <a class="el" href="class_ov_flow_global_matcher_t.html#c00a22cfab4c68de18db859325254960">OvFlowGlobalMatcherT&lt; T &gt;</a><li>~OvFlowPostprocessor()
+: <a class="el" href="class_ov_flow_postprocessor.html#34a5c28c0b0e278e3c57213eb0936d23">OvFlowPostprocessor</a><li>~OvFlowT()
+: <a class="el" href="class_ov_flow_t.html#06a4466b8dbc69b3736656ee48667db5">OvFlowT&lt; T &gt;</a><li>~OvImageAdapter()
 : <a class="el" href="class_ov_image_adapter.html#1a522ef02079cfd27556410a80a1b00d">OvImageAdapter</a><li>~OvImagePairPreprocessorT()
 : <a class="el" href="class_ov_image_pair_preprocessor_t.html#a02fc6ecb714de75759188dd8a909dc1">OvImagePairPreprocessorT&lt; T &gt;</a><li>~OvImageT()
 : <a class="el" href="class_ov_image_t.html#f27d684639d514394c41b33c65aa032a">OvImageT&lt; T &gt;</a><li>~OvLocalMatcherT()
@@ -179,7 +191,7 @@
 : <a class="el" href="class_ov_stereo_diffuse_matcher_t.html#9f065656527eeddfaa126b19659d46ce">OvStereoDiffuseMatcherT&lt; T &gt;</a><li>~OvStereoGlobalMatcherT()
 : <a class="el" href="class_ov_stereo_global_matcher_t.html#4b1da137b5ef8f35dff00d1e1f930b0a">OvStereoGlobalMatcherT&lt; T &gt;</a><li>~OvStereoT()
 : <a class="el" href="class_ov_stereo_t.html#549ea2ece07c92d534915e7708bbcd03">OvStereoT&lt; T &gt;</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Sat Sep 30 13:31:46 2006 for OpenVis3D by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Oct 1 11:33:14 2006 for OpenVis3D by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.7 </small></address>
 </body>
