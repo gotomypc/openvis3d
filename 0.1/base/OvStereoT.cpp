@@ -3,7 +3,7 @@
 #include "OvImagePairPreprocessorT.h"
 #include "OvLocalMatcherT.h"
 #include "OvStereoGlobalMatcherT.h"
-#include "OvDisparityPostProcessor.h"
+#include "OvDisparityPostprocessor.h"
 
 template<typename T>
 OvStereoT<T>::OvStereoT()

@@ -10,7 +10,7 @@
 * @param value	input value
 * @return the rounded value
 */
-inline int round(double value)
+inline int ov_round(double value)
 {
 	return int(value + 0.5);
 }
@@ -1088,6 +1088,7 @@ const OvImageT<bool> operator == (const OvImageT<T> & i1, const double i2)
 	return result;
 }
 
+template<>
 const OvImageT<bool> OvImageT<bool>::operator ! () const
 {
 	OvImageT<bool> result(*this); 
@@ -2232,7 +2233,7 @@ const OvImageT<T> resizeNearestNbr(const OvImageT<T> & input, double scale, bool
 			for(j=0; j<result.mWidth;j++)
 				for(i=0; i<result.mHeight;i++)
 				{
-					result(i,j,k) = (T) intermediate(round(i/scale),round(j/scale),k); //scale
+					result(i,j,k) = (T) intermediate(ov_round(i/scale),ov_round(j/scale),k); //scale
 				}		
 	}
 	else
@@ -2241,7 +2242,7 @@ const OvImageT<T> resizeNearestNbr(const OvImageT<T> & input, double scale, bool
 			for(j=0; j<result.mWidth;j++)
 				for(i=0; i<result.mHeight;i++)
 				{
-					result(i,j,k) = (T) input(round(i/scale),round(j/scale),k); //scale
+					result(i,j,k) = (T) input(ov_round(i/scale),ov_round(j/scale),k); //scale
 				}		
 	}
 

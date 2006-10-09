@@ -6,7 +6,7 @@
 #include "OvImagePairPreprocessorT.h"
 #include "OvLocalMatcherT.h"
 #include "OvFlowGlobalMatcherT.h"
-#include "OvFlowPostProcessor.h"
+#include "OvFlowPostprocessor.h"
 
 
 ///Class for managing the execution of an optical flow algorithm.

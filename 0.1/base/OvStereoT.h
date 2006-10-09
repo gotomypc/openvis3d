@@ -6,7 +6,7 @@
 #include "OvImagePairPreprocessorT.h"
 #include "OvLocalMatcherT.h"
 #include "OvStereoGlobalMatcherT.h"
-#include "OvDisparityPostProcessor.h"
+#include "OvDisparityPostprocessor.h"
 
 
 ///Class for managing the execution of a stereo algorithm.

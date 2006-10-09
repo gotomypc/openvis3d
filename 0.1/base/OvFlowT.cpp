@@ -3,7 +3,7 @@
 #include "OvImagePairPreprocessorT.h"
 #include "OvLocalMatcherT.h"
 #include "OvFlowGlobalMatcherT.h"
-#include "OvFlowPostProcessor.h"
+#include "OvFlowPostprocessor.h"
 
 template<typename T>
 OvFlowT<T>::OvFlowT()
