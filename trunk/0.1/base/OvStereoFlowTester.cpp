@@ -202,8 +202,10 @@ void testOpticalFlow(char*imgfilename1, char*imgfilename2, double minshiftX, dou
 
 int main()
 {
-	//testStereo("..\\tsukuba1color.png", "..\\tsukuba2color.png", 5, 15);
-	testOpticalFlow("..\\car1.png", "..\\car0.png", 0, 18, -3, 0);
+	printf("\nRunning stereo ...\n");
+	testStereo("tsukuba1color.png", "tsukuba2color.png", 5, 15);
+	printf("\nRunning optical flow ...\n");
+	testOpticalFlow("car1.png", "car0.png", 0, 18, -3, 0);
 
 	return 0;
 }
