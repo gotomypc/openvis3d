@@ -1,3 +1,6 @@
+#ifndef __PROBABILISTICEGOMOTION_H
+#define __PROBABILISTICEGOMOTION_H
+
 /** 
  * @file ProbabilisticEgomotion.h
  * @brief Declarations for functions used for 3D egomotion estimation.
@@ -51,3 +54,5 @@ void print3Dmotion(MotionParameters egomotion);
 * @return a MotionParameters structure containing computed 3D motion
 */
 MotionParameters compute3Dmotion(OvImageAdapter & image1, OvImageAdapter & image2, float f, float pp_x, float pp_y, int numpoints=500, int numsearches=100);
+
+#endif //__PROBABILISTICEGOMOTION_H
