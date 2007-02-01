@@ -31,3 +31,4 @@ B) Change the library path and the names of the libraries as needed on this line
 
 LDFLAGS = -L /usr/lib -L . -lm -lcv -lhighgui -lcvaux
 
+
