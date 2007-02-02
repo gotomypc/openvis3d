@@ -11,13 +11,13 @@ OvImageAdapter::~OvImageAdapter()
 
 void OvImageAdapter::getSize(int & height, int & width, int & nColorChannels) const
 {
-	height = mHeight;
-	width = mWidth;
-	nColorChannels = mChannels;
+  height = mHeight;
+  width = mWidth;
+  nColorChannels = mChannels;
 }
 
 void OvImageAdapter::getDataType(OvImageAdapter::OvDataType & dataType) const
 {
-	dataType = mDataType;
+  dataType = mDataType;
 }
 

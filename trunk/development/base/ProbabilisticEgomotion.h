@@ -2,15 +2,15 @@
 #define __PROBABILISTICEGOMOTION_H
 
 /** 
- * @file ProbabilisticEgomotion.h
- * @brief Declarations for functions used for 3D egomotion estimation.
- * Code for computing Egomotion from correspondence probability distributions.
- * the function compute3Dmotion provides the entire public interface.
- * print3Dmotion is a trivial function which prints out the motion parameters in a
- * MotionParameters struct.
- *
- * @author Justin Domke
- */
+* @file ProbabilisticEgomotion.h
+* @brief Declarations for functions used for 3D egomotion estimation.
+* Code for computing Egomotion from correspondence probability distributions.
+* the function compute3Dmotion provides the entire public interface.
+* print3Dmotion is a trivial function which prints out the motion parameters in a
+* MotionParameters struct.
+*
+* @author Justin Domke
+*/
 
 
 ///structure for storing 3D egomotion parameters.

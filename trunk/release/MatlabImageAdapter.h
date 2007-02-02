@@ -19,27 +19,27 @@ extern "C" {
 */
 class MatlabImageAdapter :	public OvImageAdapter
 {
-	MatlabImageAdapter(){}; /**< to prevent the default constructor from being used */
+  MatlabImageAdapter(){}; /**< to prevent the default constructor from being used */
 
 public:
-	MatlabImageAdapter(mxArray*im);
-	virtual ~MatlabImageAdapter();
+  MatlabImageAdapter(mxArray*im);
+  virtual ~MatlabImageAdapter();
 
-	virtual double getPixel(int row, int column, int channel) const;
-	virtual void   setPixel(double value, int row, int column, int channel);
+  virtual double getPixel(int row, int column, int channel) const;
+  virtual void   setPixel(double value, int row, int column, int channel);
 
 protected:
-	mxArray* mMatlabImage;	/**< saved pointer to Matlab mxArray object */
-	void * mImageDataPtr;   /**< saved pointer to the raw data array within the Matlab mxArray object */
+  mxArray* mMatlabImage;	/**< saved pointer to Matlab mxArray object */
+  void * mImageDataPtr;   /**< saved pointer to the raw data array within the Matlab mxArray object */
 
-	double (MatlabImageAdapter::*getPixelfptr) (int row, int column, int channel) const; /**< function pointer used to store getpixel function appropriate for image datatype */
-	void (MatlabImageAdapter::*setPixelfptr) (double value, int row, int column, int channel); /**< function pointer used to store setpixel function appropriate for image datatype */
+  double (MatlabImageAdapter::*getPixelfptr) (int row, int column, int channel) const; /**< function pointer used to store getpixel function appropriate for image datatype */
+  void (MatlabImageAdapter::*setPixelfptr) (double value, int row, int column, int channel); /**< function pointer used to store setpixel function appropriate for image datatype */
 
-	template<class T> double getPixelT(int row, int column, int channel) const;
-	template<class T> void setPixelT(double value, int row, int column, int channel);
+  template<class T> double getPixelT(int row, int column, int channel) const;
+  template<class T> void setPixelT(double value, int row, int column, int channel);
 
-	double getPixeldoNothing(int row, int column, int channel) const;
-	void   setPixeldoNothing(double value, int row, int column, int channel);
+  double getPixeldoNothing(int row, int column, int channel) const;
+  void   setPixeldoNothing(double value, int row, int column, int channel);
 };
 
 #endif

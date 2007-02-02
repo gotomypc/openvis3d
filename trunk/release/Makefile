@@ -2,7 +2,7 @@ CC = g++
 INC = -I /usr/include/opencv
 CCFLAGS = -g -Wall $(INC)
 LDFLAGS = -L /usr/lib -L . -lm -lcv0.9 -lhighgui0.9 -lcvaux0.9
-SRC = OvStereoFlowTester.cpp OvImageAdapter.cpp OpenCVImageAdapter.cpp
+SRC = OpencvExample.cpp OvImageAdapter.cpp OpenCVImageAdapter.cpp
 OBJS = $(SRC:.cpp=.o)
 
 .cpp.o:
@@ -11,10 +11,10 @@ OBJS = $(SRC:.cpp=.o)
 .o:
 	$(CC) $(CCFLAGS) $(LDFLAGS) $^ -o $@
 
-OvStereoFlowTester: $(OBJS)
-all: OvStereoFlowTester
+OpencvExample: $(OBJS)
+all: OpencvExample
 clean:
-	rm -f $(OBJS) OvStereoFlowTester
+	rm -f $(OBJS) OpencvExample
 
 #
 # The lines below were auto-generated using g++ -MM *.cpp
@@ -22,7 +22,7 @@ clean:
 OpenCVImageAdapter.o: OpenCVImageAdapter.cpp OpenCVImageAdapter.h \
   OvImageAdapter.h
 OvImageAdapter.o: OvImageAdapter.cpp OvImageAdapter.h
-OvStereoFlowTester.o: OvStereoFlowTester.cpp Openvis3d.h OvImageAdapter.h \
+OpencvExample.o: OpencvExample.cpp Openvis3d.h OvImageAdapter.h \
   OvImageT.h OvImagePairPreprocessorT.h OvLocalMatcherT.h \
   OvStereoGlobalMatcherT.h OvDisparityPostprocessor.h \
   OvFlowGlobalMatcherT.h OvFlowPostprocessor.h OvStereoT.h \

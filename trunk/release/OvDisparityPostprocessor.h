@@ -16,28 +16,28 @@ class OvDisparityPostprocessor
 {
 public:
 
-	OvDisparityPostprocessor(); /**< Default constructor with no parameters */
+  OvDisparityPostprocessor(); /**< Default constructor with no parameters */
 
-	virtual ~OvDisparityPostprocessor(); /**< Destructor */
+  virtual ~OvDisparityPostprocessor(); /**< Destructor */
 
-	/**
-	* Main method for postprocessing stereo disparity results.
-	* Note: This method modifies the inputs, so be careful.
-	* @param leftDisparityMap the disparity map for the left image
-	* @param rightDisparityMap the disparity map for the right image
-	* @param leftOcclusions the occlusion map for the left image
-	* @param rightOcclusions the occlusion map for the right image	
-	* @return true if successful.
-	*/
-	virtual bool postProcessDisparity(OvImageT<double> & leftDisparityMap, OvImageT<double> & rightDisparityMap, OvImageT<double> & leftOcclusions, OvImageT<double> & rightOcclusions) = 0;
+  /**
+  * Main method for postprocessing stereo disparity results.
+  * Note: This method modifies the inputs, so be careful.
+  * @param leftDisparityMap the disparity map for the left image
+  * @param rightDisparityMap the disparity map for the right image
+  * @param leftOcclusions the occlusion map for the left image
+  * @param rightOcclusions the occlusion map for the right image	
+  * @return true if successful.
+  */
+  virtual bool postProcessDisparity(OvImageT<double> & leftDisparityMap, OvImageT<double> & rightDisparityMap, OvImageT<double> & leftOcclusions, OvImageT<double> & rightOcclusions) = 0;
 
-	/**
-	* Used for specifying any parameters required.
-	* @param nparams number of parameters which are being passed
-	* @param params the values of the parameters
-	* @return true if successful.
-	*/
-	virtual bool setParams(int nparams, double*params) = 0;
+  /**
+  * Used for specifying any parameters required.
+  * @param nparams number of parameters which are being passed
+  * @param params the values of the parameters
+  * @return true if successful.
+  */
+  virtual bool setParams(int nparams, double*params) = 0;
 };
 
 OvDisparityPostprocessor::OvDisparityPostprocessor()

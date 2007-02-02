@@ -16,26 +16,26 @@ class OvImagePairPreprocessorT
 {
 public:
 
-	OvImagePairPreprocessorT(); /**< Default constructor with no parameters */
+  OvImagePairPreprocessorT(); /**< Default constructor with no parameters */
 
-	virtual ~OvImagePairPreprocessorT(); /**< Destructor */
+  virtual ~OvImagePairPreprocessorT(); /**< Destructor */
 
-	/**
-	* Main method for preprocessing an image pair.
-	* Note: This method modifies the input images, so be careful.
-	* @param i1 the first image
-	* @param i2 the second image
-	* @return true if successful.
-	*/
-	virtual bool preProcessImagePair(OvImageT<T> & i1, OvImageT<T> & i2) = 0;
+  /**
+  * Main method for preprocessing an image pair.
+  * Note: This method modifies the input images, so be careful.
+  * @param i1 the first image
+  * @param i2 the second image
+  * @return true if successful.
+  */
+  virtual bool preProcessImagePair(OvImageT<T> & i1, OvImageT<T> & i2) = 0;
 
-	/**
-	* Used for specifying any parameters required.
-	* @param nparams number of parameters which are being passed
-	* @param params the values of the parameters
-	* @return true if successful.
-	*/
-	virtual bool setParams(int nparams, double*params) = 0;
+  /**
+  * Used for specifying any parameters required.
+  * @param nparams number of parameters which are being passed
+  * @param params the values of the parameters
+  * @return true if successful.
+  */
+  virtual bool setParams(int nparams, double*params) = 0;
 };
 
 template<typename T>
