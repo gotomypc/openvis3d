@@ -17,4 +17,4 @@
 #include "OvStereoDiffuseMatcherT.h"
 #include "OvFlowDiffuseMatcherT.h"
 
-#include "OpenCVImageAdapter.h"
+

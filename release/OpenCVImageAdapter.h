@@ -17,26 +17,26 @@
 */
 class OpenCVImageAdapter :	public OvImageAdapter
 {
-	OpenCVImageAdapter(){}; /**< to prevent the default constructor from being used */
+  OpenCVImageAdapter(){}; /**< to prevent the default constructor from being used */
 
 public:
-	OpenCVImageAdapter(IplImage*im);
-	virtual ~OpenCVImageAdapter();
+  OpenCVImageAdapter(IplImage*im);
+  virtual ~OpenCVImageAdapter();
 
-	virtual double getPixel(int row, int column, int channel) const;
-	virtual void   setPixel(double value, int row, int column, int channel);
+  virtual double getPixel(int row, int column, int channel) const;
+  virtual void   setPixel(double value, int row, int column, int channel);
 
 protected:
-	IplImage*mIplImage;	/**< saved pointer to OpenCV IplImage object */
+  IplImage*mIplImage;	/**< saved pointer to OpenCV IplImage object */
 
-	double (OpenCVImageAdapter::*getPixelfptr) (int row, int column, int channel) const; /**< function pointer used to store getpixel function appropriate for image datatype */
-	void   (OpenCVImageAdapter::*setPixelfptr) (double value, int row, int column, int channel); /**< function pointer used to store setpixel function appropriate for image datatype */
+  double (OpenCVImageAdapter::*getPixelfptr) (int row, int column, int channel) const; /**< function pointer used to store getpixel function appropriate for image datatype */
+  void   (OpenCVImageAdapter::*setPixelfptr) (double value, int row, int column, int channel); /**< function pointer used to store setpixel function appropriate for image datatype */
 
-	template<typename T> double getPixelT(int row, int column, int channel) const;
-	template<typename T> void   setPixelT(double value, int row, int column, int channel);
+  template<typename T> double getPixelT(int row, int column, int channel) const;
+  template<typename T> void   setPixelT(double value, int row, int column, int channel);
 
-	double getPixeldoNothing(int row, int column, int channel) const;
-	void   setPixeldoNothing(double value, int row, int column, int channel);
+  double getPixeldoNothing(int row, int column, int channel) const;
+  void   setPixeldoNothing(double value, int row, int column, int channel);
 };
 
 #endif
